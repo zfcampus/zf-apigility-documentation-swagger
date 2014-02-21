@@ -32,16 +32,8 @@
       docExpansion: "none"
     });
 
-      window.authorizations.add("foo", new ApiKeyAuthorization('accept', 'application/vnd.swagger+json', 'header'));
-
-//    $('#input_apiKey').change(function() {
-//      var key = $('#input_apiKey')[0].value;
-//      log("key: " + key);
-//      if(key && key.trim() != "") {
-//        log("added key " + key);
-//        window.authorizations.add("key", new ApiKeyAuthorization("api_key", key, "query"));
-//      }
-//    })
+    // content-neg
+    window.authorizations.add("foo", new ApiKeyAuthorization('accept', 'application/vnd.swagger+json', 'header'));
     window.swaggerUi.load();
   });
 
