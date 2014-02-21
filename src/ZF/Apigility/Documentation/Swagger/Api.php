@@ -26,6 +26,10 @@ class Api extends BaseApi
         return array(
             'apiVersion' => $this->api->version,
             'swaggerVersion' => '1.2',
+            /*
+            'basePath' => '/api',
+            'resourcePath' => '/' . $this->api->name,
+            */
             'apis' => $services
         );
     }

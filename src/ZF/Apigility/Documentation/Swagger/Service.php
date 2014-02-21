@@ -41,13 +41,16 @@ class Service extends BaseService
             }
         }
 
+        $routeBasePath = substr($service->route, 0, strpos($service->route, '['));
+
         return array(
             'apiVersion' => $service->api->getVersion(),
             'swaggerVersion' => '1.2',
-            'resourcePath' => $service->route,
+//            'basePath' => '', //$routeBasePath,
+//            'resourcePath' => $routeBasePath,
             'apis' => array(array(
                 'operations' => $operations,
-                'path' => $service->route
+                'path' => $routeBasePath,
             )),
             'produces' => $service->requestAcceptTypes,
             'models' => array(
