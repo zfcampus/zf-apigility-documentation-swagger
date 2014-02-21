@@ -8,14 +8,15 @@
         "zend",
         "module",
         "apigiltiy",
-        "documentation"
+        "documentation",
+        "swagger"
     ],
     "homepage": "http://apigility.org/",
     "support": {
         "email": "apigility-users@zend.com",
         "irc": "irc://irc.freenode.net/apigility",
-        "source": "https://github.com/zfcampus/zf-apigility-documentation",
-        "issues": "https://github.com/zfcampus/zf-apigility-documentation/issues"
+        "source": "https://github.com/zfcampus/zf-apigility-documentation-swagger",
+        "issues": "https://github.com/zfcampus/zf-apigility-documentation-swagger/issues"
     },
     "extra": {
         "branch-alias": {
