@@ -8,9 +8,10 @@ class Service extends BaseService
 {
     protected $service;
 
-    public function __construct(BaseService $service)
+    public function __construct(BaseService $service, $baseUrl)
     {
         $this->service = $service;
+        $this->baseUrl = $baseUrl;
     }
 
     public function toArray()
@@ -46,8 +47,8 @@ class Service extends BaseService
         return array(
             'apiVersion' => $service->api->getVersion(),
             'swaggerVersion' => '1.2',
-//            'basePath' => '', //$routeBasePath,
-//            'resourcePath' => $routeBasePath,
+            'basePath' => $this->baseUrl,
+            'resourcePath' => $this->baseUrl,
             'apis' => array(array(
                 'operations' => $operations,
                 'path' => $routeBasePath,

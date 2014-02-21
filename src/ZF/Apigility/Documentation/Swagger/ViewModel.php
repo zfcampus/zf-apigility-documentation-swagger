@@ -15,7 +15,7 @@ class ViewModel extends JsonModel
                 $model = new Api($this->variables['documentation']);
                 return $model->toArray();
             case 'service':
-                $model = new Service($this->variables['documentation']);
+                $model = new Service($this->variables['documentation'], $this->variables['baseUrl']);
                 return $model->toArray();
         }
     }
