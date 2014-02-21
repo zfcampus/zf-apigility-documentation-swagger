@@ -28,4 +28,5 @@ class SwaggerUiController extends AbstractActionController
         $viewModel->setTerminal(true);
         return $viewModel;
     }
-} 
+
+}

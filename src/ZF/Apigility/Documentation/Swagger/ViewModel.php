@@ -18,8 +18,6 @@ class ViewModel extends JsonModel
                 $model = new Service($this->variables['documentation']);
                 return $model->toArray();
         }
-
     }
-
 }
  
