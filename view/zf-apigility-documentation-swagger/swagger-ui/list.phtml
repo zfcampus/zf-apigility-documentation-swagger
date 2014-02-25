@@ -1,4 +1,8 @@
 
 <?php foreach ($this->apis as $api): ?>
-    <a href="/swagger/<?php echo $api?>"><?php echo $api?></a>
+    <a href="/swagger/<?php echo $api['name'] ?>"><?php echo $api['name']?></a>
+    <?php if ($api['latest_version'] > 1): foreach (range(2, $api['latest_version']) as $v): ?>
+        <a href="/swagger/<?php echo $api['name'] ?>-v<?php echo $v ?>">(V<?php echo $v?>)</a>
+    <?php endforeach; endif; ?>
+    <br>
 <?php endforeach; ?>
