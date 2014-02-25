@@ -6,10 +6,7 @@
 
 namespace ZF\Apigility\Documentation\Swagger;
 
-use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
-use Zend\ModuleManager\Feature\ConfigProviderInterface;
-
-class Module implements AutoloaderProviderInterface, ConfigProviderInterface
+class Module
 {
     public function getConfig()
     {
@@ -25,10 +22,5 @@ class Module implements AutoloaderProviderInterface, ConfigProviderInterface
                 )
             )
         );
-    }
-
-    public function getServiceConfig()
-    {
-        return array();
     }
 }

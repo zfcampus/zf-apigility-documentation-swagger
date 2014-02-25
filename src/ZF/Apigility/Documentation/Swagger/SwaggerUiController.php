@@ -1,17 +1,38 @@
 <?php
+/**
+ * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
+ * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ */
 
 namespace ZF\Apigility\Documentation\Swagger;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use ZF\Apigility\Documentation\ApiFactory;
 
 class SwaggerUiController extends AbstractActionController
 {
+    /**
+     * @var ApiFactory
+     */
+    protected $apiFactory;
+
+    /**
+     * @param ApiFactory $apiFactory 
+     */
+    public function __construct(ApiFactory $apiFactory)
+    {
+        $this->apiFactory = $apiFactory;
+    }
+
+    /**
+     * List available APIs
+     * 
+     * @return ViewModel
+     */
     public function listAction()
     {
-        /** @var \ZF\Apigility\Documentation\ApiFactory $apiFactory */
-        $apiFactory = $this->serviceLocator->get('ZF\Apigility\Documentation\ApiFactory');
-        $apis = $apiFactory->createApiList();
+        $apis = $this->apiFactory->createApiList();
 
         $viewModel = new ViewModel(array('apis' => $apis));
         $viewModel->setTemplate('zf-apigility-documentation-swagger/swagger-ui/list');
@@ -19,6 +40,11 @@ class SwaggerUiController extends AbstractActionController
         return $viewModel;
     }
 
+    /**
+     * Show the Swagger UI for a given API
+     * 
+     * @return ViewModel
+     */
     public function showAction()
     {
         $api = $this->params()->fromRoute('api');
@@ -28,5 +54,4 @@ class SwaggerUiController extends AbstractActionController
         $viewModel->setTerminal(true);
         return $viewModel;
     }
-
 }
