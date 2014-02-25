@@ -18,7 +18,7 @@ return array(
                 ),
                 'may_terminate' => true,
                 'child_routes' => array(
-                    'training-and-certification' => array(
+                    'api' => array(
                         'type' => 'Segment',
                         'options' => array(
                             'route' => '/:api',
