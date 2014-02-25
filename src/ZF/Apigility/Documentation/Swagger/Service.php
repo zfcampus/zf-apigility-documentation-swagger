@@ -57,15 +57,16 @@ class Service extends BaseService
         }
 
         $routeBasePath = substr($service->route, 0, strpos($service->route, '['));
+        $routeWithReplacements = str_replace(array('[', ']', '{/'), array('{', '}', '/{'), $service->route);
 
         return array(
             'apiVersion' => $service->api->getVersion(),
             'swaggerVersion' => '1.2',
             'basePath' => $this->baseUrl,
-            'resourcePath' => $this->baseUrl,
+            'resourcePath' => $routeBasePath,
             'apis' => array(array(
                 'operations' => $operations,
-                'path' => $routeBasePath,
+                'path' => $routeWithReplacements,
             )),
             'produces' => $service->requestAcceptTypes,
             'models' => array(
