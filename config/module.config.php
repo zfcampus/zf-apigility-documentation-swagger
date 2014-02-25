@@ -33,8 +33,8 @@ return array(
         ),
     ),
     'controllers' => array(
-        'invokables' => array(
-            'ZF\Apigility\Documentation\Swagger\SwaggerUi' => 'ZF\Apigility\Documentation\Swagger\SwaggerUiController',
+        'factories' => array(
+            'ZF\Apigility\Documentation\Swagger\SwaggerUi' => 'ZF\Apigility\Documentation\Swagger\SwaggerUiControllerFactory',
         ),
     ),
 

@@ -1,4 +1,8 @@
 <?php
+/**
+ * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
+ * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ */
 
 namespace ZF\Apigility\Documentation\Swagger;
 
@@ -6,14 +10,24 @@ use ZF\Apigility\Documentation\Service as BaseService;
 
 class Service extends BaseService
 {
+    /**
+     * @var BaseService
+     */
     protected $service;
 
+    /**
+     * @param BaseService $service 
+     * @param string $baseUrl 
+     */
     public function __construct(BaseService $service, $baseUrl)
     {
         $this->service = $service;
         $this->baseUrl = $baseUrl;
     }
 
+    /**
+     * @return array
+     */
     public function toArray()
     {
         // localize service object for brevity
@@ -58,11 +72,9 @@ class Service extends BaseService
                 $service->api->getName() => array(
                     'id' => $service->api->getName(),
                     'required' => $requiredProperties,
-                    'properties' => $properties
-                )
-
-            )
+                    'properties' => $properties,
+                ),
+            ),
         );
     }
 }
- 

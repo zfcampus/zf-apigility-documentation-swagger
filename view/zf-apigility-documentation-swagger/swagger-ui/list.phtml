@@ -1,8 +1,26 @@
-
-<?php foreach ($this->apis as $api): ?>
-    <a href="/swagger/<?php echo $api['name'] ?>"><?php echo $api['name']?></a>
-    <?php if ($api['latest_version'] > 1): foreach (range(2, $api['latest_version']) as $v): ?>
-        <a href="/swagger/<?php echo $api['name'] ?>-v<?php echo $v ?>">(V<?php echo $v?>)</a>
-    <?php endforeach; endif; ?>
-    <br>
-<?php endforeach; ?>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>API</th>
+            <th>Versions</th>
+        </tr>
+    </thead>
+    <tbody><?php foreach ($this->apis as $api): 
+        $name = $api['name']; ?>
+        <tr>
+            <td><?php echo $this->escapeHtml($name) ?></td>
+            <td><pre><?php 
+                $view     = $this;
+                $versions = array_map(function ($version) use ($name, $view) {
+                    return sprintf(
+                        '<a href="/swagger/%s-v%s">V%s</a>',
+                        $view->escapeUrl($name),
+                        $view->escapeUrl($version),
+                        $view->escapeHtml($version)
+                    );
+                }, $api['versions']);
+                echo implode('&nbsp;|&nbsp;', $versions);
+            ?></td>
+        </tr>
+    <?php endforeach; ?></tbody>
+</table>
