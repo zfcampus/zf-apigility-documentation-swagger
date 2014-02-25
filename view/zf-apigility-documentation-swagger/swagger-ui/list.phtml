@@ -13,7 +13,7 @@
                 $view     = $this;
                 $versions = array_map(function ($version) use ($name, $view) {
                     return sprintf(
-                        '<a href="/swagger/%s-v%s">V%s</a>',
+                        '<a href="/swagger/%s-v%s">v%s</a>',
                         $view->escapeUrl($name),
                         $view->escapeUrl($version),
                         $view->escapeHtml($version)
