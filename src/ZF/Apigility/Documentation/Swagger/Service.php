@@ -33,16 +33,16 @@ class Service extends BaseService
         // localize service object for brevity
         $service = $this->service;
 
-        // routes and parameter mangling
+        // routes and parameter mangling ([:foo] will become {foo}
         $routeBasePath = substr($service->route, 0, strpos($service->route, '['));
         $routeWithReplacements = str_replace(array('[', ']', '{/', '{:'), array('{', '}', '/{', '{'), $service->route);
 
         // find all parameters in Swagger naming format
         preg_match_all('#{([\w\d_-]+)}#', $routeWithReplacements, $parameterMatches);
 
-        $parameters = array();
+        $templateParameters = array();
         foreach ($parameterMatches[1] as $paramSegmentName) {
-            $parameters[] = array(
+            $templateParameters[$paramSegmentName] = array(
                 'paramType' => 'path',
                 'name' => $paramSegmentName,
                 'description' => 'URL parameter ' . $paramSegmentName,
@@ -53,16 +53,79 @@ class Service extends BaseService
             );
         }
 
-        // find all operations
-        $operations = array();
-        foreach ($service->operations as $operation) {
-            $method = $operation->getHttpMethod();
-            $operations[] = array(
-                'method' => $method,
-                'notes' => $operation->getDescription(),
-                'nickname' => $method . ' for ' . $service->api->getName(),
-                'type' => $service->api->getName(),
-                'parameters' => $parameters
+        $postPatchPutBodyParameter = array(
+            'name' => 'body',
+            'paramType' => 'body',
+            'required' => true,
+            'type' => $service->api->getName()
+        );
+
+        $operationGroups = array();
+
+        // if there is a routeIdentifierName, this is REST service, need to enumerate
+        if ($service->routeIdentifierName) {
+            // find all ENTITY operations
+            $entityOperations = array();
+            foreach ($service->entityOperations as $entityOperation) {
+                $method = $entityOperation->getHttpMethod();
+                $entityParameters = array_values($templateParameters);
+                if (in_array($method, array('POST', 'PUT', 'PATCH'))) {
+                    $entityParameters[] = $postPatchPutBodyParameter;
+                }
+                $entityOperations[] = array(
+                    'method' => $method,
+                    'notes' => $entityOperation->getDescription(),
+                    'nickname' => $method . ' for ' . $service->api->getName(),
+                    'type' => $service->api->getName(),
+                    'parameters' => $entityParameters
+                );
+            }
+            $operationGroups[] = array(
+                'operations' => $entityOperations,
+                'path' => $routeWithReplacements
+            );
+
+            // find all COLLECTION operations
+            $operations = array();
+            foreach ($service->operations as $operation) {
+                unset($templateParameters[$service->routeIdentifierName]);
+                $method = $operation->getHttpMethod();
+                $collectionParameters = array_values($templateParameters);
+                if (in_array($method, array('POST', 'PUT', 'PATCH'))) {
+                    $collectionParameters[] = $postPatchPutBodyParameter;
+                }
+                $operations[] = array(
+                    'method' => $method,
+                    'notes' => $operation->getDescription(),
+                    'nickname' => $method . ' for ' . $service->api->getName(),
+                    'type' => $service->api->getName(),
+                    'parameters' => $collectionParameters
+                );
+            }
+            $operationGroups[] = array(
+                'operations' => $operations,
+                'path' => str_replace('/{' . $service->routeIdentifierName . '}', '', $routeWithReplacements)
+            );
+        } else {
+            // find all other operations
+            $operations = array();
+            foreach ($service->operations as $operation) {
+                $method = $operation->getHttpMethod();
+                $parameters = array_values($templateParameters);
+                if (in_array($method, array('POST', 'PUT', 'PATCH'))) {
+                    $parameters[] = $postPatchPutBodyParameter;
+                }
+                $operations[] = array(
+                    'method' => $method,
+                    'notes' => $operation->getDescription(),
+                    'nickname' => $method . ' for ' . $service->api->getName(),
+                    'type' => $service->api->getName(),
+                    'parameters' => $parameters
+                );
+            }
+            $operationGroups[] = array(
+                'operations' => $operations,
+                'path' => $routeWithReplacements
             );
         }
 
@@ -77,30 +140,12 @@ class Service extends BaseService
             }
         }
 
-
-
-//        "parameters":[
-//          {
-//              "paramType": "path",
-//            "name": "petId",
-//            "description": "ID of pet that needs to be fetched",
-//            "dataType": "integer",
-//            "format": "int64",
-//            "required": true,
-//            "minimum": 0,
-//            "maximum": 10
-//          }
-//        ],
-
         return array(
             'apiVersion' => $service->api->getVersion(),
             'swaggerVersion' => '1.2',
             'basePath' => $this->baseUrl,
             'resourcePath' => $routeBasePath,
-            'apis' => array(array(
-                'operations' => $operations,
-                'path' => $routeWithReplacements,
-            )),
+            'apis' => $operationGroups,
             'produces' => $service->requestAcceptTypes,
             'models' => array(
                 $service->api->getName() => array(
