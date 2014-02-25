@@ -33,6 +33,26 @@ class Service extends BaseService
         // localize service object for brevity
         $service = $this->service;
 
+        // routes and parameter mangling
+        $routeBasePath = substr($service->route, 0, strpos($service->route, '['));
+        $routeWithReplacements = str_replace(array('[', ']', '{/', '{:'), array('{', '}', '/{', '{'), $service->route);
+
+        // find all parameters in Swagger naming format
+        preg_match_all('#{([\w\d_-]+)}#', $routeWithReplacements, $parameterMatches);
+
+        $parameters = array();
+        foreach ($parameterMatches[1] as $paramSegmentName) {
+            $parameters[] = array(
+                'paramType' => 'path',
+                'name' => $paramSegmentName,
+                'description' => 'URL parameter ' . $paramSegmentName,
+                'dataType' => 'string',
+                'required' => false,
+                'minimum' => 0,
+                'maximum' => 1
+            );
+        }
+
         // find all operations
         $operations = array();
         foreach ($service->operations as $operation) {
@@ -41,7 +61,8 @@ class Service extends BaseService
                 'method' => $method,
                 'notes' => $operation->getDescription(),
                 'nickname' => $method . ' for ' . $service->api->getName(),
-                'type' => $service->api->getName()
+                'type' => $service->api->getName(),
+                'parameters' => $parameters
             );
         }
 
@@ -56,8 +77,20 @@ class Service extends BaseService
             }
         }
 
-        $routeBasePath = substr($service->route, 0, strpos($service->route, '['));
-        $routeWithReplacements = str_replace(array('[', ']', '{/'), array('{', '}', '/{'), $service->route);
+
+
+//        "parameters":[
+//          {
+//              "paramType": "path",
+//            "name": "petId",
+//            "description": "ID of pet that needs to be fetched",
+//            "dataType": "integer",
+//            "format": "int64",
+//            "required": true,
+//            "minimum": 0,
+//            "maximum": 10
+//          }
+//        ],
 
         return array(
             'apiVersion' => $service->api->getVersion(),

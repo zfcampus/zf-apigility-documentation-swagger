@@ -33,8 +33,17 @@
                 docExpansion: "none"
             });
 
+            var acceptHeader = {
+                apply: function(obj, authorizations) {
+                    if (obj.url.match(/<?= preg_quote($this->url('zf-apigility-documentation', array('api' => $this->api)), '/') ?>/)) {
+                        obj.headers['Accept'] = 'application/vnd.swagger+json';
+                    }
+                    return true;
+                }
+            };
+
             // content-neg
-            window.authorizations.add("foo", new ApiKeyAuthorization('accept', 'application/vnd.swagger+json', 'header'));
+            window.authorizations.add("documentation-accept-header", acceptHeader);
             window.swaggerUi.load();
         });
     </script>
