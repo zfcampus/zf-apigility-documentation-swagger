@@ -40,6 +40,7 @@ class Service extends BaseService
         // find all parameters in Swagger naming format
         preg_match_all('#{([\w\d_-]+)}#', $routeWithReplacements, $parameterMatches);
 
+        // parameters
         $templateParameters = array();
         foreach ($parameterMatches[1] as $paramSegmentName) {
             $templateParameters[$paramSegmentName] = array(
@@ -60,6 +61,34 @@ class Service extends BaseService
             'type' => $service->api->getName()
         );
 
+        $responses = array(
+            200 => array(
+                'code' => 200,
+                'message' => 'Success',
+            ),
+            401 => array(
+                'code' => 401,
+                'message' => 'Invalid Credentials',
+            ),
+            404 => array(
+                'code' => 404,
+                'message' => 'The ' . $service->api->getName() . ' cannot be found'
+            ),
+            406 => array(
+                'code' => 406,
+                'message' => 'Invalid Accept header'
+            ),
+            415 => array(
+                'code' => 406,
+                'message' => 'Invalid content-type header'
+            ),
+            422 => array(
+                'code' => 422,
+                'message' => 'Failed validation of the ' . $service->api->getName() . ' model'
+            )
+        );
+
+
         $operationGroups = array();
 
         // if there is a routeIdentifierName, this is REST service, need to enumerate
@@ -74,10 +103,12 @@ class Service extends BaseService
                 }
                 $entityOperations[] = array(
                     'method' => $method,
+                    'summary' => $entityOperation->getDescription(),
                     'notes' => $entityOperation->getDescription(),
                     'nickname' => $method . ' for ' . $service->api->getName(),
                     'type' => $service->api->getName(),
-                    'parameters' => $entityParameters
+                    'parameters' => $entityParameters,
+                    'responseMessages' => array_values($responses)
                 );
             }
             $operationGroups[] = array(
@@ -96,10 +127,12 @@ class Service extends BaseService
                 }
                 $operations[] = array(
                     'method' => $method,
+                    'summary' => $operation->getDescription(),
                     'notes' => $operation->getDescription(),
                     'nickname' => $method . ' for ' . $service->api->getName(),
                     'type' => $service->api->getName(),
-                    'parameters' => $collectionParameters
+                    'parameters' => $collectionParameters,
+                    'responseMessages' => array_values($responses)
                 );
             }
             $operationGroups[] = array(
@@ -117,10 +150,12 @@ class Service extends BaseService
                 }
                 $operations[] = array(
                     'method' => $method,
+                    'summary' => $operation->getDescription(),
                     'notes' => $operation->getDescription(),
                     'nickname' => $method . ' for ' . $service->api->getName(),
                     'type' => $service->api->getName(),
-                    'parameters' => $parameters
+                    'parameters' => $parameters,
+                    'responseMessages' => array_values($responses)
                 );
             }
             $operationGroups[] = array(
