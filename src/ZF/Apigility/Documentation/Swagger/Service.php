@@ -116,14 +116,18 @@ class Service extends BaseService
         // if there is a routeIdentifierName, this is REST service, need to enumerate
         if ($service->routeIdentifierName) {
             $fields = $service->fields;
+            $entityOperations = array();
+            $collectionOperations = array();
 
             // find all COLLECTION operations
-            $operations = array();
-            foreach ($service->operations as $operation) {
-                unset($templateParameters[$service->routeIdentifierName]);
-                $method               = $operation->getHttpMethod();
+            foreach ($service->operations as $collectionOperation) {
+                $method               = $collectionOperation->getHttpMethod();
                 $responseMessages     = $alwaysPresentResponses;
-                $collectionParameters = array_values($templateParameters);
+
+                // collection parameters
+                $collectionParameters = $templateParameters;
+                unset($collectionParameters[$service->routeIdentifierName]);
+                $collectionParameters = array_values($collectionParameters);
 
                 if (in_array($method, array('POST', 'PUT', 'PATCH'))) {
                     $collectionParameters[] = $postPatchPutBodyParameter;
@@ -138,14 +142,14 @@ class Service extends BaseService
                     $responseMessages += $deleteResponses;
                 }
 
-                if ($operation->requiresAuthorization()) {
+                if ($collectionOperation->requiresAuthorization()) {
                     $responseMessages += $authResponses;
                 }
 
-                $operations[] = array(
+                $collectionOperations[] = array(
                     'method'           => $method,
-                    'summary'          => $operation->getDescription(),
-                    'notes'            => $operation->getDescription(),
+                    'summary'          => $collectionOperation->getDescription(),
+                    'notes'            => $collectionOperation->getDescription(),
                     'nickname'         => $method . ' for ' . $service->api->getName(),
                     'type'             => $service->api->getName(),
                     'parameters'       => $collectionParameters,
@@ -154,7 +158,6 @@ class Service extends BaseService
             }
 
             // find all ENTITY operations
-            $entityOperations = array();
             foreach ($service->entityOperations as $entityOperation) {
                 $method           = $entityOperation->getHttpMethod();
                 $responseMessages = $alwaysPresentResponses + $notFoundResponses;
@@ -163,8 +166,7 @@ class Service extends BaseService
                 if (in_array($method, array('POST', 'PUT', 'PATCH'))) {
                     $entityParameters[] = $postPatchPutBodyParameter;
                     $responseMessages += $okResponses;
-
-                    if (! empty($fields)) {
+                    if (!empty($fields)) {
                         $responseMessages += $validationResponses;
                     }
                 } elseif ($method === 'GET') {
@@ -189,10 +191,10 @@ class Service extends BaseService
             }
 
             $operationGroups[] = array(
-                'operations' => $operations,
+                'operations' => $collectionOperations,
                 'path'       => str_replace('/{' . $service->routeIdentifierName . '}', '', $routeWithReplacements)
             );
-            
+
             $operationGroups[] = array(
                 'operations' => $entityOperations,
                 'path' => $routeWithReplacements
