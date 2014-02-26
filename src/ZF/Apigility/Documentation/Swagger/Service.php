@@ -64,39 +64,39 @@ class Service extends BaseService
         $alwaysPresentResponses = array(
             406 => array(
                 'code' => 406,
-                'message' => 'Invalid Accept header'
+                'message' => 'Not Acceptable'
             ),
             415 => array(
-                'code' => 406,
-                'message' => 'Invalid content-type header'
+                'code' => 415,
+                'message' => 'Unsupported Media Type'
             ),
         );
 
         $okResponses = array(
             200 => array(
                 'code' => 200,
-                'message' => 'Success',
+                'message' => 'OK',
             ),
         );
 
         $notFoundResponses = array(
             404 => array(
                 'code' => 404,
-                'message' => 'The ' . $service->api->getName() . ' cannot be found'
+                'message' => 'Not Found'
             ),
         );
 
         $validationResponses = array(
             422 => array(
                 'code' => 422,
-                'message' => 'Failed validation of the ' . $service->api->getName() . ' model'
+                'message' => 'Unprocessable Entity (Failed validation of the ' . $service->api->getName() . ' model)'
             )
         );
 
         $authResponses = array(
             401 => array(
                 'code' => 401,
-                'message' => 'Invalid Credentials',
+                'message' => 'Unauthorized',
             ),
             403 => array(
                 'code' => 403,
