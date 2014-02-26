@@ -35,12 +35,21 @@
 
             var acceptHeader = {
                 apply: function(obj, authorizations) {
-                    if (obj.url.match(/<?= preg_quote($this->url('zf-apigility-documentation', array('api' => $this->api)), '/') ?>/)) {
+                    if (obj.url.match(/<?= preg_quote($this->url('zf-apigility-documentation', array('api' => null)), '/') ?>/)) {
                         obj.headers['Accept'] = 'application/vnd.swagger+json';
                     }
                     return true;
                 }
             };
+
+            $('#auth-header-value').change(function() {
+                var key = $('#auth-header-value')[0].value;
+                console.log("key: " + key);
+                if(key && key.trim() != "") {
+                    console.log("added key " + key);
+                    window.authorizations.add("authorization-header", new ApiKeyAuthorization("Authorization", key, "header"));
+                }
+            });
 
             // content-neg
             window.authorizations.add("documentation-accept-header", acceptHeader);
@@ -55,7 +64,7 @@
 
         <form id='api_selector'>
             <div class='input'><input placeholder="http://example.com/api" id="input_baseUrl" name="baseUrl" type="text"/></div>
-            <div class='input'><input placeholder="api_key" id="input_apiKey" name="apiKey" type="text"/></div>
+            <div class='input'>Authorization: <input placeholder="Enter Authorization header value here" id="auth-header-value" name="auth-header-value" type="text"/></div>
             <div class='input'><a id="explore" href="#">Explore</a></div>
         </form>
     </div>
