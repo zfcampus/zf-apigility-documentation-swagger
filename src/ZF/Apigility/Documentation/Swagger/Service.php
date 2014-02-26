@@ -61,19 +61,7 @@ class Service extends BaseService
             'type' => $service->api->getName()
         );
 
-        $responses = array(
-            200 => array(
-                'code' => 200,
-                'message' => 'Success',
-            ),
-            401 => array(
-                'code' => 401,
-                'message' => 'Invalid Credentials',
-            ),
-            404 => array(
-                'code' => 404,
-                'message' => 'The ' . $service->api->getName() . ' cannot be found'
-            ),
+        $alwaysPresentResponses = array(
             406 => array(
                 'code' => 406,
                 'message' => 'Invalid Accept header'
@@ -82,33 +70,85 @@ class Service extends BaseService
                 'code' => 406,
                 'message' => 'Invalid content-type header'
             ),
+        );
+
+        $okResponses = array(
+            200 => array(
+                'code' => 200,
+                'message' => 'Success',
+            ),
+        );
+
+        $notFoundResponses = array(
+            404 => array(
+                'code' => 404,
+                'message' => 'The ' . $service->api->getName() . ' cannot be found'
+            ),
+        );
+
+        $validationResponses = array(
             422 => array(
                 'code' => 422,
                 'message' => 'Failed validation of the ' . $service->api->getName() . ' model'
             )
         );
 
+        $authResponses = array(
+            401 => array(
+                'code' => 401,
+                'message' => 'Invalid Credentials',
+            ),
+            403 => array(
+                'code' => 403,
+                'message' => 'Forbidden',
+            ),
+        );
+
+        $deleteResponses = array(
+            204 => array(
+                'code' => 204,
+                'message' => 'No Content',
+            ),
+        );
 
         $operationGroups = array();
 
         // if there is a routeIdentifierName, this is REST service, need to enumerate
         if ($service->routeIdentifierName) {
+            $fields = $service->fields;
+
             // find all ENTITY operations
             $entityOperations = array();
             foreach ($service->entityOperations as $entityOperation) {
-                $method = $entityOperation->getHttpMethod();
+                $method           = $entityOperation->getHttpMethod();
+                $responseMessages = $alwaysPresentResponses + $notFoundResponses;
                 $entityParameters = array_values($templateParameters);
+
                 if (in_array($method, array('POST', 'PUT', 'PATCH'))) {
                     $entityParameters[] = $postPatchPutBodyParameter;
+                    $responseMessages += $okResponses;
+
+                    if (! empty($fields)) {
+                        $responseMessages += $validationResponses;
+                    }
+                } elseif ($method === 'GET') {
+                    $responseMessages += $okResponses;
+                } elseif ($method === 'DELETE') {
+                    $responseMessages += $deleteResponses;
                 }
+
+                if ($entityOperation->requiresAuthorization()) {
+                    $responseMessages += $authResponses;
+                }
+
                 $entityOperations[] = array(
-                    'method' => $method,
-                    'summary' => $entityOperation->getDescription(),
-                    'notes' => $entityOperation->getDescription(),
-                    'nickname' => $method . ' for ' . $service->api->getName(),
-                    'type' => $service->api->getName(),
-                    'parameters' => $entityParameters,
-                    'responseMessages' => array_values($responses)
+                    'method'           => $method,
+                    'summary'          => $entityOperation->getDescription(),
+                    'notes'            => $entityOperation->getDescription(),
+                    'nickname'         => $method . ' for ' . $service->api->getName(),
+                    'type'             => $service->api->getName(),
+                    'parameters'       => $entityParameters,
+                    'responseMessages' => array_values($responseMessages)
                 );
             }
             $operationGroups[] = array(
@@ -120,47 +160,81 @@ class Service extends BaseService
             $operations = array();
             foreach ($service->operations as $operation) {
                 unset($templateParameters[$service->routeIdentifierName]);
-                $method = $operation->getHttpMethod();
+                $method               = $operation->getHttpMethod();
+                $responseMessages     = $alwaysPresentResponses;
                 $collectionParameters = array_values($templateParameters);
+
                 if (in_array($method, array('POST', 'PUT', 'PATCH'))) {
                     $collectionParameters[] = $postPatchPutBodyParameter;
+                    $responseMessages += $okResponses;
+
+                    if (! empty($fields)) {
+                        $responseMessages += $validationResponses;
+                    }
+                } elseif ($method === 'GET') {
+                    $responseMessages += $okResponses;
+                } elseif ($method === 'DELETE') {
+                    $responseMessages += $deleteResponses;
                 }
+
+                if ($operation->requiresAuthorization()) {
+                    $responseMessages += $authResponses;
+                }
+
                 $operations[] = array(
-                    'method' => $method,
-                    'summary' => $operation->getDescription(),
-                    'notes' => $operation->getDescription(),
-                    'nickname' => $method . ' for ' . $service->api->getName(),
-                    'type' => $service->api->getName(),
-                    'parameters' => $collectionParameters,
-                    'responseMessages' => array_values($responses)
+                    'method'           => $method,
+                    'summary'          => $operation->getDescription(),
+                    'notes'            => $operation->getDescription(),
+                    'nickname'         => $method . ' for ' . $service->api->getName(),
+                    'type'             => $service->api->getName(),
+                    'parameters'       => $collectionParameters,
+                    'responseMessages' => array_values($responseMessages)
                 );
             }
             $operationGroups[] = array(
                 'operations' => $operations,
-                'path' => str_replace('/{' . $service->routeIdentifierName . '}', '', $routeWithReplacements)
+                'path'       => str_replace('/{' . $service->routeIdentifierName . '}', '', $routeWithReplacements)
             );
         } else {
+            $fields = $service->fields;
+
             // find all other operations
             $operations = array();
             foreach ($service->operations as $operation) {
-                $method = $operation->getHttpMethod();
-                $parameters = array_values($templateParameters);
+                $method           = $operation->getHttpMethod();
+                $responseMessages = $alwaysPresentResponses;
+                $parameters       = array_values($templateParameters);
+
                 if (in_array($method, array('POST', 'PUT', 'PATCH'))) {
                     $parameters[] = $postPatchPutBodyParameter;
+                    $responseMessages += $okResponses;
+
+                    if (! empty($fields)) {
+                        $responseMessages += $validationResponses;
+                    }
+                } elseif ($method === 'GET') {
+                    $responseMessages += $okResponses;
+                } elseif ($method === 'DELETE') {
+                    $responseMessages += $deleteResponses;
                 }
+
+                if ($operation->requiresAuthorization()) {
+                    $responseMessages += $authResponses;
+                }
+
                 $operations[] = array(
-                    'method' => $method,
-                    'summary' => $operation->getDescription(),
-                    'notes' => $operation->getDescription(),
-                    'nickname' => $method . ' for ' . $service->api->getName(),
-                    'type' => $service->api->getName(),
-                    'parameters' => $parameters,
-                    'responseMessages' => array_values($responses)
+                    'method'           => $method,
+                    'summary'          => $operation->getDescription(),
+                    'notes'            => $operation->getDescription(),
+                    'nickname'         => $method . ' for ' . $service->api->getName(),
+                    'type'             => $service->api->getName(),
+                    'parameters'       => $parameters,
+                    'responseMessages' => array_values($responseMessages)
                 );
             }
             $operationGroups[] = array(
                 'operations' => $operations,
-                'path' => $routeWithReplacements
+                'path'       => $routeWithReplacements
             );
         }
 
@@ -176,16 +250,16 @@ class Service extends BaseService
         }
 
         return array(
-            'apiVersion' => $service->api->getVersion(),
+            'apiVersion'     => $service->api->getVersion(),
             'swaggerVersion' => '1.2',
-            'basePath' => $this->baseUrl,
-            'resourcePath' => $routeBasePath,
-            'apis' => $operationGroups,
-            'produces' => $service->requestAcceptTypes,
-            'models' => array(
+            'basePath'       => $this->baseUrl,
+            'resourcePath'   => $routeBasePath,
+            'apis'           => $operationGroups,
+            'produces'       => $service->requestAcceptTypes,
+            'models'         => array(
                 $service->api->getName() => array(
-                    'id' => $service->api->getName(),
-                    'required' => $requiredProperties,
+                    'id'         => $service->api->getName(),
+                    'required'   => $requiredProperties,
                     'properties' => $properties,
                 ),
             ),
