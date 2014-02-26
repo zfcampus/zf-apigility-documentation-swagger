@@ -1,0 +1,8 @@
+#header form#api_selector .input input#auth-header-value {
+  width: 200px;
+}
+
+#header form#api_selector .input label {
+  color: #0F6AB4;
+  font-size: 0.8em;
+}
