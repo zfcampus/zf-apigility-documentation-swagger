@@ -117,45 +117,6 @@ class Service extends BaseService
         if ($service->routeIdentifierName) {
             $fields = $service->fields;
 
-            // find all ENTITY operations
-            $entityOperations = array();
-            foreach ($service->entityOperations as $entityOperation) {
-                $method           = $entityOperation->getHttpMethod();
-                $responseMessages = $alwaysPresentResponses + $notFoundResponses;
-                $entityParameters = array_values($templateParameters);
-
-                if (in_array($method, array('POST', 'PUT', 'PATCH'))) {
-                    $entityParameters[] = $postPatchPutBodyParameter;
-                    $responseMessages += $okResponses;
-
-                    if (! empty($fields)) {
-                        $responseMessages += $validationResponses;
-                    }
-                } elseif ($method === 'GET') {
-                    $responseMessages += $okResponses;
-                } elseif ($method === 'DELETE') {
-                    $responseMessages += $deleteResponses;
-                }
-
-                if ($entityOperation->requiresAuthorization()) {
-                    $responseMessages += $authResponses;
-                }
-
-                $entityOperations[] = array(
-                    'method'           => $method,
-                    'summary'          => $entityOperation->getDescription(),
-                    'notes'            => $entityOperation->getDescription(),
-                    'nickname'         => $method . ' for ' . $service->api->getName(),
-                    'type'             => $service->api->getName(),
-                    'parameters'       => $entityParameters,
-                    'responseMessages' => array_values($responseMessages)
-                );
-            }
-            $operationGroups[] = array(
-                'operations' => $entityOperations,
-                'path' => $routeWithReplacements
-            );
-
             // find all COLLECTION operations
             $operations = array();
             foreach ($service->operations as $operation) {
@@ -191,9 +152,50 @@ class Service extends BaseService
                     'responseMessages' => array_values($responseMessages)
                 );
             }
+
+            // find all ENTITY operations
+            $entityOperations = array();
+            foreach ($service->entityOperations as $entityOperation) {
+                $method           = $entityOperation->getHttpMethod();
+                $responseMessages = $alwaysPresentResponses + $notFoundResponses;
+                $entityParameters = array_values($templateParameters);
+
+                if (in_array($method, array('POST', 'PUT', 'PATCH'))) {
+                    $entityParameters[] = $postPatchPutBodyParameter;
+                    $responseMessages += $okResponses;
+
+                    if (! empty($fields)) {
+                        $responseMessages += $validationResponses;
+                    }
+                } elseif ($method === 'GET') {
+                    $responseMessages += $okResponses;
+                } elseif ($method === 'DELETE') {
+                    $responseMessages += $deleteResponses;
+                }
+
+                if ($entityOperation->requiresAuthorization()) {
+                    $responseMessages += $authResponses;
+                }
+
+                $entityOperations[] = array(
+                    'method'           => $method,
+                    'summary'          => $entityOperation->getDescription(),
+                    'notes'            => $entityOperation->getDescription(),
+                    'nickname'         => $method . ' for ' . $service->api->getName(),
+                    'type'             => $service->api->getName(),
+                    'parameters'       => $entityParameters,
+                    'responseMessages' => array_values($responseMessages)
+                );
+            }
+
             $operationGroups[] = array(
                 'operations' => $operations,
                 'path'       => str_replace('/{' . $service->routeIdentifierName . '}', '', $routeWithReplacements)
+            );
+            
+            $operationGroups[] = array(
+                'operations' => $entityOperations,
+                'path' => $routeWithReplacements
             );
         } else {
             $fields = $service->fields;
