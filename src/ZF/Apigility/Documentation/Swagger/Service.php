@@ -61,68 +61,16 @@ class Service extends BaseService
             'type' => $service->api->getName()
         );
 
-        $alwaysPresentResponses = array(
-            406 => array(
-                'code' => 406,
-                'message' => 'Not Acceptable'
-            ),
-            415 => array(
-                'code' => 415,
-                'message' => 'Unsupported Media Type'
-            ),
-        );
-
-        $okResponses = array(
-            200 => array(
-                'code' => 200,
-                'message' => 'OK',
-            ),
-        );
-
-        $notFoundResponses = array(
-            404 => array(
-                'code' => 404,
-                'message' => 'Not Found'
-            ),
-        );
-
-        $validationResponses = array(
-            422 => array(
-                'code' => 422,
-                'message' => 'Unprocessable Entity (Failed validation of the ' . $service->api->getName() . ' model)'
-            )
-        );
-
-        $authResponses = array(
-            401 => array(
-                'code' => 401,
-                'message' => 'Unauthorized',
-            ),
-            403 => array(
-                'code' => 403,
-                'message' => 'Forbidden',
-            ),
-        );
-
-        $deleteResponses = array(
-            204 => array(
-                'code' => 204,
-                'message' => 'No Content',
-            ),
-        );
-
         $operationGroups = array();
 
         // if there is a routeIdentifierName, this is REST service, need to enumerate
         if ($service->routeIdentifierName) {
-            $fields = $service->fields;
             $entityOperations = array();
             $collectionOperations = array();
 
             // find all COLLECTION operations
             foreach ($service->operations as $collectionOperation) {
                 $method               = $collectionOperation->getHttpMethod();
-                $responseMessages     = $alwaysPresentResponses;
 
                 // collection parameters
                 $collectionParameters = $templateParameters;
@@ -131,19 +79,6 @@ class Service extends BaseService
 
                 if (in_array($method, array('POST', 'PUT', 'PATCH'))) {
                     $collectionParameters[] = $postPatchPutBodyParameter;
-                    $responseMessages += $okResponses;
-
-                    if (! empty($fields)) {
-                        $responseMessages += $validationResponses;
-                    }
-                } elseif ($method === 'GET') {
-                    $responseMessages += $okResponses;
-                } elseif ($method === 'DELETE') {
-                    $responseMessages += $deleteResponses;
-                }
-
-                if ($collectionOperation->requiresAuthorization()) {
-                    $responseMessages += $authResponses;
                 }
 
                 $collectionOperations[] = array(
@@ -153,30 +88,17 @@ class Service extends BaseService
                     'nickname'         => $method . ' for ' . $service->api->getName(),
                     'type'             => $service->api->getName(),
                     'parameters'       => $collectionParameters,
-                    'responseMessages' => array_values($responseMessages)
+                    'responseMessages' => $collectionOperation->getResponseStatusCodes(),
                 );
             }
 
             // find all ENTITY operations
             foreach ($service->entityOperations as $entityOperation) {
                 $method           = $entityOperation->getHttpMethod();
-                $responseMessages = $alwaysPresentResponses + $notFoundResponses;
                 $entityParameters = array_values($templateParameters);
 
                 if (in_array($method, array('POST', 'PUT', 'PATCH'))) {
                     $entityParameters[] = $postPatchPutBodyParameter;
-                    $responseMessages += $okResponses;
-                    if (!empty($fields)) {
-                        $responseMessages += $validationResponses;
-                    }
-                } elseif ($method === 'GET') {
-                    $responseMessages += $okResponses;
-                } elseif ($method === 'DELETE') {
-                    $responseMessages += $deleteResponses;
-                }
-
-                if ($entityOperation->requiresAuthorization()) {
-                    $responseMessages += $authResponses;
                 }
 
                 $entityOperations[] = array(
@@ -186,7 +108,7 @@ class Service extends BaseService
                     'nickname'         => $method . ' for ' . $service->api->getName(),
                     'type'             => $service->api->getName(),
                     'parameters'       => $entityParameters,
-                    'responseMessages' => array_values($responseMessages)
+                    'responseMessages' => $entityOperation->getResponseStatusCodes(),
                 );
             }
 
@@ -200,30 +122,15 @@ class Service extends BaseService
                 'path' => $routeWithReplacements
             );
         } else {
-            $fields = $service->fields;
 
             // find all other operations
             $operations = array();
             foreach ($service->operations as $operation) {
                 $method           = $operation->getHttpMethod();
-                $responseMessages = $alwaysPresentResponses;
                 $parameters       = array_values($templateParameters);
 
                 if (in_array($method, array('POST', 'PUT', 'PATCH'))) {
                     $parameters[] = $postPatchPutBodyParameter;
-                    $responseMessages += $okResponses;
-
-                    if (! empty($fields)) {
-                        $responseMessages += $validationResponses;
-                    }
-                } elseif ($method === 'GET') {
-                    $responseMessages += $okResponses;
-                } elseif ($method === 'DELETE') {
-                    $responseMessages += $deleteResponses;
-                }
-
-                if ($operation->requiresAuthorization()) {
-                    $responseMessages += $authResponses;
                 }
 
                 $operations[] = array(
@@ -233,7 +140,7 @@ class Service extends BaseService
                     'nickname'         => $method . ' for ' . $service->api->getName(),
                     'type'             => $service->api->getName(),
                     'parameters'       => $parameters,
-                    'responseMessages' => array_values($responseMessages)
+                    'responseMessages' => $operation->getResponseStatusCodes(),
                 );
             }
             $operationGroups[] = array(
