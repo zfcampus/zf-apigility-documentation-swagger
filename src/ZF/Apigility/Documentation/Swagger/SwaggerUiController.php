@@ -35,8 +35,7 @@ class SwaggerUiController extends AbstractActionController
         $apis = $this->apiFactory->createApiList();
 
         $viewModel = new ViewModel(array('apis' => $apis));
-        $viewModel->setTemplate('zf-apigility-documentation-swagger/swagger-ui/list');
-        $viewModel->setTerminal(true);
+        $viewModel->setTemplate('zf-apigility-documentation-swagger/list');
         return $viewModel;
     }
 
@@ -50,7 +49,7 @@ class SwaggerUiController extends AbstractActionController
         $api = $this->params()->fromRoute('api');
 
         $viewModel = new ViewModel(array('api' => $api));
-        $viewModel->setTemplate('zf-apigility-documentation-swagger/swagger-ui/show');
+        $viewModel->setTemplate('zf-apigility-documentation-swagger/show');
         $viewModel->setTerminal(true);
         return $viewModel;
     }
