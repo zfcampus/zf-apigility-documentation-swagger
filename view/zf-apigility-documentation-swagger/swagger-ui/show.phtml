@@ -21,7 +21,7 @@
     <script type="text/javascript">
         $(function () {
             window.swaggerUi = new SwaggerUi({
-                url: "<?php echo $this->url('zf-apigility-documentation', array('api' => $this->api)) ?>",
+                url: "<?php echo $this->url('zf-apigility/documentation', array('api' => $this->api)) ?>",
                 dom_id: "swagger-ui-container",
                 supportedSubmitMethods: ['get', 'post', 'put', 'delete'],
                 onComplete: function(swaggerApi, swaggerUi){
@@ -36,7 +36,7 @@
 
             var acceptHeader = {
                 apply: function(obj, authorizations) {
-                    if (obj.url.match(/<?= preg_quote($this->url('zf-apigility-documentation', array('api' => null)), '/') ?>/)) {
+                    if (obj.url.match(/<?= preg_quote($this->url('zf-apigility/documentation', array('api' => null)), '/') ?>/)) {
                         obj.headers['Accept'] = 'application/vnd.swagger+json';
                     }
                     return true;

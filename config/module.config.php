@@ -7,26 +7,30 @@
 return array(
     'router' => array(
         'routes' => array(
-            'zf-apigility-documentation-swagger' => array(
-                'type' => 'Zend\Mvc\Router\Http\Segment',
-                'options' => array(
-                    'route'    => '/swagger',
-                    'defaults' => array(
-                        'controller' => 'ZF\Apigility\Documentation\Swagger\SwaggerUi',
-                        'action'     => 'list',
-                    ),
-                ),
-                'may_terminate' => true,
+            'zf-apigility' => array(
                 'child_routes' => array(
-                    'api' => array(
-                        'type' => 'Segment',
+                    'swagger' => array(
+                        'type' => 'Zend\Mvc\Router\Http\Segment',
                         'options' => array(
-                            'route' => '/:api',
+                            'route'    => '/swagger',
                             'defaults' => array(
-                                'action' => 'show',
+                                'controller' => 'ZF\Apigility\Documentation\Swagger\SwaggerUi',
+                                'action'     => 'list',
                             ),
                         ),
                         'may_terminate' => true,
+                        'child_routes' => array(
+                            'api' => array(
+                                'type' => 'Segment',
+                                'options' => array(
+                                    'route' => '/:api',
+                                    'defaults' => array(
+                                        'action' => 'show',
+                                    ),
+                                ),
+                                'may_terminate' => true,
+                            ),
+                        ),
                     ),
                 ),
             ),
