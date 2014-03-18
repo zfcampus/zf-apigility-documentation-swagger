@@ -28,12 +28,12 @@
         "zendframework/zendframework": "~2.3"
     },
     "require-dev": {
-        "phpunit/PHPUnit": "3.7.*"
+        "fabpot/php-cs-fixer": "*@dev"
     },
     "autoload": {
-        "psr-0": {
-            "ZF\\Apigility\\Documentation\\Swagger": "src/",
-            "ZFTest\\Apigility\\Documentation\\Swagger": "test/"
+        "psr-4": {
+            "ZF\\Apigility\\Documentation\\Swagger\\": "src/",
+            "ZFTest\\Apigility\\Documentation\\Swagger\\": "test/"
         },
         "classmap": [
             "Module.php"

@@ -18,7 +18,7 @@ class Module
         return array(
             'Zend\Loader\StandardAutoloader' => array(
                 'namespaces' => array(
-                    __NAMESPACE__ => __DIR__ . '/src/ZF/Apigility/Documentation/Swagger/'
+                    __NAMESPACE__ => __DIR__ . '/src/'
                 )
             )
         );
