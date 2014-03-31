@@ -6,7 +6,7 @@
 
 namespace ZFTest\Apigility\Documentation\Swagger;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit_Framework_TestCase as TestCase;
 use Zend\EventManager\EventManager;
 use Zend\Http\Response as HttpResponse;
 use Zend\Stdlib\Response as StdlibResponse;
@@ -29,15 +29,15 @@ class SwaggerViewStrategyTest extends TestCase
     {
         $listeners = $this->events->getListeners(ViewEvent::EVENT_RENDERER);
         $this->assertEquals(1, count($listeners));
-        $listener = $listeners->current();
+        $listener = $listeners->top();
         $this->assertEquals(array($this->strategy, 'selectRenderer'), $listener->getCallback());
-        $this->equals(200, $listener->getMetadatum('priority'));
+        $this->assertEquals(200, $listener->getMetadatum('priority'));
 
         $listeners = $this->events->getListeners(ViewEvent::EVENT_RESPONSE);
         $this->assertEquals(1, count($listeners));
-        $listener = $listeners->current();
+        $listener = $listeners->top();
         $this->assertEquals(array($this->strategy, 'injectResponse'), $listener->getCallback());
-        $this->equals(200, $listener->getMetadatum('priority'));
+        $this->assertEquals(200, $listener->getMetadatum('priority'));
 
     }
 
