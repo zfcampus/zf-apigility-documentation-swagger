@@ -23,4 +23,25 @@ class Module
             )
         );
     }
+
+    public function onBootstrap($e)
+    {
+        $app    = $e->getApplication();
+        $events = $app->getEventManager();
+        $events->attach('render', array($this, 'onRender'), 100);
+    }
+
+    public function onRender($e)
+    {
+        $model = $e->getResult();
+        if (! $model instanceof ViewModel) {
+            return;
+        }
+
+        $app      = $e->getApplication();
+        $services = $app->getServiceManager();
+        $view     = $services->get('View');
+        $events   = $view->getEventManager();
+        $events->attach($services->get(__NAMESPACE__ . '\SwaggerViewStrategy'));
+    }
 }

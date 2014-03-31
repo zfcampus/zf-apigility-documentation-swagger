@@ -36,6 +36,13 @@ return array(
             ),
         ),
     ),
+
+    'service_manager' => array(
+        'factories' => array(
+            'ZF\Apigility\Documentation\Swagger\SwaggerViewStrategy' => 'ZF\Apigility\Documentation\Swagger\SwaggerViewStrategyFactory',
+        ),
+    ),
+
     'controllers' => array(
         'factories' => array(
             'ZF\Apigility\Documentation\Swagger\SwaggerUi' => 'ZF\Apigility\Documentation\Swagger\SwaggerUiControllerFactory',
