@@ -24,7 +24,7 @@ class SwaggerViewStrategy extends AbstractListenerAggregate
     protected $renderer;
 
     /**
-     * @param JsonRenderer $renderer 
+     * @param JsonRenderer $renderer
      */
     public function __construct(JsonRenderer $renderer)
     {
@@ -32,8 +32,8 @@ class SwaggerViewStrategy extends AbstractListenerAggregate
     }
 
     /**
-     * @param EventManagerInterface $events 
-     * @param int $priority 
+     * @param EventManagerInterface $events
+     * @param int $priority
      */
     public function attach(EventManagerInterface $events, $priority = 200)
     {
@@ -42,7 +42,7 @@ class SwaggerViewStrategy extends AbstractListenerAggregate
     }
 
     /**
-     * @param ViewEvent $e 
+     * @param ViewEvent $e
      * @return null|JsonRenderer
      */
     public function selectRenderer(ViewEvent $e)
@@ -57,7 +57,7 @@ class SwaggerViewStrategy extends AbstractListenerAggregate
     }
 
     /**
-     * @param ViewEvent $e 
+     * @param ViewEvent $e
      */
     public function injectResponse(ViewEvent $e)
     {

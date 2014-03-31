@@ -9,7 +9,7 @@ namespace ZF\Apigility\Documentation\Swagger;
 class SwaggerViewStrategyFactory
 {
     /**
-     * @param \Zend\ServiceManager\ServiceLocatorInterface $services 
+     * @param \Zend\ServiceManager\ServiceLocatorInterface $services
      * @return SwaggerViewStrategy
      */
     public function __invoke($services)

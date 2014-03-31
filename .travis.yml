@@ -12,7 +12,7 @@ before_script:
 script:
   - ./vendor/bin/phpunit --coverage-clover ./build/logs/clover.xml
   - ./bin/check-cs.sh
-  
+
 notifications:
   irc: "irc.freenode.org#apigility-dev"
   email: false
