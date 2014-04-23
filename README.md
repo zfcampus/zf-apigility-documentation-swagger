@@ -1,5 +1,5 @@
-ZF Apigilty Documentation Swagger
-=================================
+Swagger Documentation Provider for Apigility
+============================================
 
 [![Build Status](https://travis-ci.org/zfcampus/zf-apigility-documentation-swagger.png)](https://travis-ci.org/zfcampus/zf-apigility-documentation-swagger)
 
@@ -9,11 +9,13 @@ Introduction
 This module provides Apigility the ability to show API documentation through a
 [Swagger UI](http://swagger.wordnik.com/).
 
-The Swagger UI is immediately accessible after enabling this module at `/apigility/swagger`.
-In addition to providing the HTML UI, it also provides a Swagger content-type so that
-documentation can be exposed in the Swagger API format.  It is accessible by passing
-the Accept header as `application/vnd.swagger+json` at the URL
-`/apigility/documentation/:module/:service`.
+The Swagger UI is immediately accessible after enabling this module at the URI path `/apigility/swagger`.
+
+In addition to providing the HTML UI, this module also plugs into the main Apigility documentation
+resource (at the path `/apigility/documentation`) in order to allow returning a documentation
+payload in the `application/vnd.swagger+json` media type; this resource is what feeds the Swagger
+UI. You can access this representation by passing the media type `application/vnd.swagger+json` for
+the `Accept` header via the path `/apigility/documentation/:module/:service`.
 
 Installation
 ------------
@@ -53,11 +55,11 @@ Routes
 
 ### `/apigility/swagger`
 
-Shows the Swagger UI javascript application.
+Shows the Swagger UI JavaScript application.
 
 ### Assets: `/zf-apigility-documentation-swagger/`
 
-Various CSS, images, and javascript libraries required to deliver the Swagger UI client
+Various CSS, images, and JavaScript libraries required to deliver the Swagger UI client
 application.
 
 Configuration
@@ -65,7 +67,7 @@ Configuration
 
 ### System Configuration
 
-The following is required to ensure the module works within a ZF2 and Apigility enabled
+The following is required to ensure the module works within a ZF2 and/or Apigility-enabled
 application:
 
 ```php
@@ -145,11 +147,10 @@ ZF2 Events
 
 #### `ZF\Apigility\Documentation\Swagger\Module`
 
-This listener is attached to `MvcEvent::EVENT_RENDER` at priority `100`.  It's
-purpose is to conditionally attach a view strategy to the view system in cases
-where the controller response is a `ZF\Apigility\Documentation\Swagger\ViewModel`
-based view model, that was likely selected as the content-negotiated view model
-based off of Accept media types.
+This listener is attached to the `MvcEvent::EVENT_RENDER` event at priority `100`.  Its purpose is
+to conditionally attach a view strategy to the view system in cases where the controller response is
+a `ZF\Apigility\Documentation\Swagger\ViewModel` view model (likely selected as the
+content-negotiated view model based off of `Accept` media types).
 
 ZF2 Services
 ------------
@@ -158,6 +159,5 @@ ZF2 Services
 
 #### `ZF\Apigility\Documentation\Swagger\ViewModel`
 
-This view model is responsible for translating the available `ZF\Apigility\Documentation`
-models into Swagger specific models, and further casting them to arrays for
-later rendering as JSON.
+This view model is responsible for translating the available `ZF\Apigility\Documentation` models
+into Swagger-specific models, and further casting them to arrays for later rendering as JSON.
