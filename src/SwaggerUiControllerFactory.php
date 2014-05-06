@@ -13,7 +13,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class SwaggerUiControllerFactory implements FactoryInterface
 {
     /**
-     * @param ServiceLocatorInterface $controllers 
+     * @param ServiceLocatorInterface $controllers
      * @return SwaggerUiController
      * @throws ServiceNotCreatedException if the ZF\Apigility\Documentation\ApiFactory service is missing
      */
