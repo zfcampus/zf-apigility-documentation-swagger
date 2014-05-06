@@ -16,7 +16,7 @@ class Api extends BaseApi
     protected $api;
 
     /**
-     * @param BaseApi $api 
+     * @param BaseApi $api
      */
     public function __construct(BaseApi $api)
     {

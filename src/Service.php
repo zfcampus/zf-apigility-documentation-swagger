@@ -16,8 +16,8 @@ class Service extends BaseService
     protected $service;
 
     /**
-     * @param BaseService $service 
-     * @param string $baseUrl 
+     * @param BaseService $service
+     * @param string $baseUrl
      */
     public function __construct(BaseService $service, $baseUrl)
     {

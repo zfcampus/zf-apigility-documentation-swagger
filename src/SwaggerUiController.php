@@ -18,7 +18,7 @@ class SwaggerUiController extends AbstractActionController
     protected $apiFactory;
 
     /**
-     * @param ApiFactory $apiFactory 
+     * @param ApiFactory $apiFactory
      */
     public function __construct(ApiFactory $apiFactory)
     {
@@ -27,7 +27,7 @@ class SwaggerUiController extends AbstractActionController
 
     /**
      * List available APIs
-     * 
+     *
      * @return ViewModel
      */
     public function listAction()
@@ -41,7 +41,7 @@ class SwaggerUiController extends AbstractActionController
 
     /**
      * Show the Swagger UI for a given API
-     * 
+     *
      * @return ViewModel
      */
     public function showAction()
