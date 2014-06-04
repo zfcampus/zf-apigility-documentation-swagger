@@ -17,6 +17,11 @@ payload in the `application/vnd.swagger+json` media type; this resource is what 
 UI. You can access this representation by passing the media type `application/vnd.swagger+json` for
 the `Accept` header via the path `/apigility/documentation/:module/:service`.
 
+Requirements
+------------
+  
+Please see the [composer.json](composer.json) file.
+
 Installation
 ------------
 
