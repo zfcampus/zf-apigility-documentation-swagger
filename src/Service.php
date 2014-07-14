@@ -58,7 +58,7 @@ class Service extends BaseService
             'name' => 'body',
             'paramType' => 'body',
             'required' => true,
-            'type' => $service->api->getName()
+            'type' => $service->getName()
         );
 
         $operationGroups = array();
@@ -85,8 +85,8 @@ class Service extends BaseService
                     'method'           => $method,
                     'summary'          => $collectionOperation->getDescription(),
                     'notes'            => $collectionOperation->getDescription(),
-                    'nickname'         => $method . ' for ' . $service->api->getName(),
-                    'type'             => $service->api->getName(),
+                    'nickname'         => $method . ' for ' . $service->getName(),
+                    'type'             => $service->getName(),
                     'parameters'       => $collectionParameters,
                     'responseMessages' => $collectionOperation->getResponseStatusCodes(),
                 );
@@ -105,8 +105,8 @@ class Service extends BaseService
                     'method'           => $method,
                     'summary'          => $entityOperation->getDescription(),
                     'notes'            => $entityOperation->getDescription(),
-                    'nickname'         => $method . ' for ' . $service->api->getName(),
-                    'type'             => $service->api->getName(),
+                    'nickname'         => $method . ' for ' . $service->getName(),
+                    'type'             => $service->getName(),
                     'parameters'       => $entityParameters,
                     'responseMessages' => $entityOperation->getResponseStatusCodes(),
                 );
@@ -137,8 +137,8 @@ class Service extends BaseService
                     'method'           => $method,
                     'summary'          => $operation->getDescription(),
                     'notes'            => $operation->getDescription(),
-                    'nickname'         => $method . ' for ' . $service->api->getName(),
-                    'type'             => $service->api->getName(),
+                    'nickname'         => $method . ' for ' . $service->getName(),
+                    'type'             => $service->getName(),
                     'parameters'       => $parameters,
                     'responseMessages' => $operation->getResponseStatusCodes(),
                 );
@@ -168,8 +168,8 @@ class Service extends BaseService
             'apis'           => $operationGroups,
             'produces'       => $service->requestAcceptTypes,
             'models'         => array(
-                $service->api->getName() => array(
-                    'id'         => $service->api->getName(),
+                $service->getName() => array(
+                    'id'         => $service->getName(),
                     'required'   => $requiredProperties,
                     'properties' => $properties,
                 ),
