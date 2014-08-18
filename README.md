@@ -58,7 +58,7 @@ return array(
 Routes
 ------
 
-### `/apigility/swagger`
+### /apigility/swagger
 
 Shows the Swagger UI JavaScript application.
 
@@ -150,7 +150,7 @@ ZF2 Events
 
 ### Listeners
 
-#### `ZF\Apigility\Documentation\Swagger\Module`
+#### ZF\Apigility\Documentation\Swagger\Module
 
 This listener is attached to the `MvcEvent::EVENT_RENDER` event at priority `100`.  Its purpose is
 to conditionally attach a view strategy to the view system in cases where the controller response is
@@ -162,7 +162,7 @@ ZF2 Services
 
 ### View Models
 
-#### `ZF\Apigility\Documentation\Swagger\ViewModel`
+#### ZF\Apigility\Documentation\Swagger\ViewModel
 
 This view model is responsible for translating the available `ZF\Apigility\Documentation` models
 into Swagger-specific models, and further casting them to arrays for later rendering as JSON.
