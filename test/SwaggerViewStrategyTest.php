@@ -38,7 +38,6 @@ class SwaggerViewStrategyTest extends TestCase
         $listener = $listeners->top();
         $this->assertEquals(array($this->strategy, 'injectResponse'), $listener->getCallback());
         $this->assertEquals(200, $listener->getMetadatum('priority'));
-
     }
 
     public function testSelectRendererReturnsJsonRendererWhenSwaggerViewModelIsPresentInEvent()
