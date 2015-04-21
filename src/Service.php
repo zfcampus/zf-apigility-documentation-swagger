@@ -122,7 +122,6 @@ class Service extends BaseService
                 'path' => $routeWithReplacements
             );
         } else {
-
             // find all other operations
             $operations = array();
             foreach ($service->operations as $operation) {
@@ -149,8 +148,14 @@ class Service extends BaseService
             );
         }
 
+        // Fields are part of the default input filter when present.
+        $fields = $service->fields;
+        if (isset($fields['input_filter'])) {
+            $fields = $fields['input_filter'];
+        }
+
         $requiredProperties = $properties = array();
-        foreach ($service->fields as $field) {
+        foreach ($fields as $field) {
             $properties[$field->getName()] = array(
                 'type' => method_exists($field, 'getType') ? $field->getType() : 'string',
                 'description' => $field->getDescription()
