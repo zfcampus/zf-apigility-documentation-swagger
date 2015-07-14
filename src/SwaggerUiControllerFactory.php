@@ -22,7 +22,8 @@ class SwaggerUiControllerFactory implements FactoryInterface
         $services = $controllers->getServiceLocator();
         if (!$services->has('ZF\Apigility\Documentation\ApiFactory')) {
             throw new ServiceNotCreatedException(sprintf(
-                '%s\SwaggerUiController requires the service ZF\Apigility\Documentation\ApiFactory, which was not found',
+                '%s\SwaggerUiController requires the service ZF\Apigility\Documentation\ApiFactory, '
+                . 'which was not found',
                 __NAMESPACE__
             ));
         }
