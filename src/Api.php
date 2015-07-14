@@ -31,7 +31,9 @@ class Api extends BaseApi
         $services = array();
         foreach ($this->api->services as $service) {
             $services[] = array(
-                'description' => ($description = $service->getDescription()) ? $description : 'Operations for ' . $service->getName(),
+                'description' => ($description = $service->getDescription())
+                ? $description
+                : 'Operations for ' . $service->getName(),
                 'path' => '/' . $service->getName()
             );
         }
