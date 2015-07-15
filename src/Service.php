@@ -35,15 +35,15 @@ class Service extends BaseService
 
         // routes and parameter mangling ([:foo] will become {foo}
         $routeBasePath = substr($service->route, 0, strpos($service->route, '['));
-        $routeWithReplacements = str_replace(array('[', ']', '{/', '{:'), array('{', '}', '/{', '{'), $service->route);
+        $routeWithReplacements = str_replace(['[', ']', '{/', '{:'], ['{', '}', '/{', '{'], $service->route);
 
         // find all parameters in Swagger naming format
         preg_match_all('#{([\w\d_-]+)}#', $routeWithReplacements, $parameterMatches);
 
         // parameters
-        $templateParameters = array();
+        $templateParameters = [];
         foreach ($parameterMatches[1] as $paramSegmentName) {
-            $templateParameters[$paramSegmentName] = array(
+            $templateParameters[$paramSegmentName] = [
                 'paramType' => 'path',
                 'name' => $paramSegmentName,
                 'description' => 'URL parameter ' . $paramSegmentName,
@@ -51,22 +51,22 @@ class Service extends BaseService
                 'required' => false,
                 'minimum' => 0,
                 'maximum' => 1
-            );
+            ];
         }
 
-        $postPatchPutBodyParameter = array(
+        $postPatchPutBodyParameter = [
             'name' => 'body',
             'paramType' => 'body',
             'required' => true,
             'type' => $service->getName()
-        );
+        ];
 
-        $operationGroups = array();
+        $operationGroups = [];
 
         // if there is a routeIdentifierName, this is REST service, need to enumerate
         if ($service->routeIdentifierName) {
-            $entityOperations = array();
-            $collectionOperations = array();
+            $entityOperations = [];
+            $collectionOperations = [];
 
             // find all COLLECTION operations
             foreach ($service->operations as $collectionOperation) {
@@ -77,11 +77,11 @@ class Service extends BaseService
                 unset($collectionParameters[$service->routeIdentifierName]);
                 $collectionParameters = array_values($collectionParameters);
 
-                if (in_array($method, array('POST', 'PUT', 'PATCH'))) {
+                if (in_array($method, ['POST', 'PUT', 'PATCH'])) {
                     $collectionParameters[] = $postPatchPutBodyParameter;
                 }
 
-                $collectionOperations[] = array(
+                $collectionOperations[] = [
                     'method'           => $method,
                     'summary'          => $collectionOperation->getDescription(),
                     'notes'            => $collectionOperation->getDescription(),
@@ -89,7 +89,7 @@ class Service extends BaseService
                     'type'             => $service->getName(),
                     'parameters'       => $collectionParameters,
                     'responseMessages' => $collectionOperation->getResponseStatusCodes(),
-                );
+                ];
             }
 
             // find all ENTITY operations
@@ -97,11 +97,11 @@ class Service extends BaseService
                 $method           = $entityOperation->getHttpMethod();
                 $entityParameters = array_values($templateParameters);
 
-                if (in_array($method, array('POST', 'PUT', 'PATCH'))) {
+                if (in_array($method, ['POST', 'PUT', 'PATCH'])) {
                     $entityParameters[] = $postPatchPutBodyParameter;
                 }
 
-                $entityOperations[] = array(
+                $entityOperations[] = [
                     'method'           => $method,
                     'summary'          => $entityOperation->getDescription(),
                     'notes'            => $entityOperation->getDescription(),
@@ -109,30 +109,30 @@ class Service extends BaseService
                     'type'             => $service->getName(),
                     'parameters'       => $entityParameters,
                     'responseMessages' => $entityOperation->getResponseStatusCodes(),
-                );
+                ];
             }
 
-            $operationGroups[] = array(
+            $operationGroups[] = [
                 'operations' => $collectionOperations,
                 'path'       => str_replace('/{' . $service->routeIdentifierName . '}', '', $routeWithReplacements)
-            );
+            ];
 
-            $operationGroups[] = array(
+            $operationGroups[] = [
                 'operations' => $entityOperations,
                 'path' => $routeWithReplacements
-            );
+            ];
         } else {
             // find all other operations
-            $operations = array();
+            $operations = [];
             foreach ($service->operations as $operation) {
                 $method           = $operation->getHttpMethod();
                 $parameters       = array_values($templateParameters);
 
-                if (in_array($method, array('POST', 'PUT', 'PATCH'))) {
+                if (in_array($method, ['POST', 'PUT', 'PATCH'])) {
                     $parameters[] = $postPatchPutBodyParameter;
                 }
 
-                $operations[] = array(
+                $operations[] = [
                     'method'           => $method,
                     'summary'          => $operation->getDescription(),
                     'notes'            => $operation->getDescription(),
@@ -140,12 +140,12 @@ class Service extends BaseService
                     'type'             => $service->getName(),
                     'parameters'       => $parameters,
                     'responseMessages' => $operation->getResponseStatusCodes(),
-                );
+                ];
             }
-            $operationGroups[] = array(
+            $operationGroups[] = [
                 'operations' => $operations,
                 'path'       => $routeWithReplacements
-            );
+            ];
         }
 
         // Fields are part of the default input filter when present.
@@ -154,31 +154,31 @@ class Service extends BaseService
             $fields = $fields['input_filter'];
         }
 
-        $requiredProperties = $properties = array();
+        $requiredProperties = $properties = [];
         foreach ($fields as $field) {
-            $properties[$field->getName()] = array(
+            $properties[$field->getName()] = [
                 'type' => method_exists($field, 'getType') ? $field->getType() : 'string',
                 'description' => $field->getDescription()
-            );
+            ];
             if ($field->isRequired()) {
                 $requiredProperties[] = $field->getName();
             }
         }
 
-        return array(
+        return [
             'apiVersion'     => $service->api->getVersion(),
             'swaggerVersion' => '1.2',
             'basePath'       => $this->baseUrl,
             'resourcePath'   => $routeBasePath,
             'apis'           => $operationGroups,
             'produces'       => $service->requestAcceptTypes,
-            'models'         => array(
-                $service->getName() => array(
+            'models'         => [
+                $service->getName() => [
                     'id'         => $service->getName(),
                     'required'   => $requiredProperties,
                     'properties' => $properties,
-                ),
-            ),
-        );
+                ],
+            ],
+        ];
     }
 }
