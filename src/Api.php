@@ -28,17 +28,17 @@ class Api extends BaseApi
      */
     public function toArray()
     {
-        $services = array();
+        $services = [];
         foreach ($this->api->services as $service) {
-            $services[] = array(
+            $services[] = [
                 'description' => ($description = $service->getDescription())
                 ? $description
                 : 'Operations for ' . $service->getName(),
                 'path' => '/' . $service->getName()
-            );
+            ];
         }
 
-        return array(
+        return [
             'apiVersion' => $this->api->version,
             'swaggerVersion' => '1.2',
             /*
@@ -46,6 +46,6 @@ class Api extends BaseApi
             'resourcePath' => '/' . $this->api->name,
             */
             'apis' => $services,
-        );
+        ];
     }
 }
