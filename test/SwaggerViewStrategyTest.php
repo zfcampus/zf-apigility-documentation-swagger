@@ -30,13 +30,13 @@ class SwaggerViewStrategyTest extends TestCase
         $listeners = $this->events->getListeners(ViewEvent::EVENT_RENDERER);
         $this->assertEquals(1, count($listeners));
         $listener = $listeners->top();
-        $this->assertEquals(array($this->strategy, 'selectRenderer'), $listener->getCallback());
+        $this->assertEquals([$this->strategy, 'selectRenderer'], $listener->getCallback());
         $this->assertEquals(200, $listener->getMetadatum('priority'));
 
         $listeners = $this->events->getListeners(ViewEvent::EVENT_RESPONSE);
         $this->assertEquals(1, count($listeners));
         $listener = $listeners->top();
-        $this->assertEquals(array($this->strategy, 'injectResponse'), $listener->getCallback());
+        $this->assertEquals([$this->strategy, 'injectResponse'], $listener->getCallback());
         $this->assertEquals(200, $listener->getMetadatum('priority'));
     }
 
@@ -44,7 +44,7 @@ class SwaggerViewStrategyTest extends TestCase
     {
         $event = new ViewEvent();
         $event->setName(ViewEvent::EVENT_RENDERER);
-        $event->setModel(new ViewModel(array()));
+        $event->setModel(new ViewModel([]));
 
         $renderer = $this->strategy->selectRenderer($event);
         $this->assertSame($this->renderer, $renderer);
