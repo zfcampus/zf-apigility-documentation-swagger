@@ -157,7 +157,7 @@ class Service extends BaseService
         $requiredProperties = $properties = [];
         foreach ($fields as $field) {
             $properties[$field->getName()] = [
-                'type' => method_exists($field, 'getType') ? $field->getType() : 'string',
+                'type' => method_exists($field, 'getFieldType') ? $field->getFieldType() : 'string',
                 'description' => $field->getDescription()
             ];
             if ($field->isRequired()) {
