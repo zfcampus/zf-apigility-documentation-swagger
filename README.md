@@ -7,7 +7,7 @@ Introduction
 ------------
 
 This module provides Apigility the ability to show API documentation through a
-[Swagger UI](http://swagger.wordnik.com/).
+[Swagger UI](http://swagger.io/).
 
 The Swagger UI is immediately accessible after enabling this module at the URI path `/apigility/swagger`.
 
