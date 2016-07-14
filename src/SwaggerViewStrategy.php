@@ -1,18 +1,21 @@
 <?php
 /**
  * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2014-2016 Zend Technologies USA Inc. (http://www.zend.com)
  */
 
 namespace ZF\Apigility\Documentation\Swagger;
 
-use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
+use Zend\EventManager\ListenerAggregateInterface;
+use Zend\EventManager\ListenerAggregateTrait;
 use Zend\View\Renderer\JsonRenderer;
 use Zend\View\ViewEvent;
 
-class SwaggerViewStrategy extends AbstractListenerAggregate
+class SwaggerViewStrategy implements ListenerAggregateInterface
 {
+    use ListenerAggregateTrait;
+
     /**
      * @var ViewModel
      */
@@ -32,8 +35,7 @@ class SwaggerViewStrategy extends AbstractListenerAggregate
     }
 
     /**
-     * @param EventManagerInterface $events
-     * @param int $priority
+     * {@inheritDoc}
      */
     public function attach(EventManagerInterface $events, $priority = 200)
     {

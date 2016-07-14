@@ -33,7 +33,7 @@ class Api extends BaseApi
             $services[] = [
                 'description' => ($description = $service->getDescription())
                 ? $description
-                : 'Operations for ' . $service->getName(),
+                : '',
                 'path' => '/' . $service->getName()
             ];
         }
