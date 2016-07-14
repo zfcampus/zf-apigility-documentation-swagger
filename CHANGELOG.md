@@ -16,7 +16,9 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Removed
 
-- Nothing.
+- [#21](https://github.com/zfcampus/zf-apigility-documentation-swagger/pull/21)
+  removes the verbiage "Operation for {Api}" as a default service description
+  from the swagger templates.
 
 ### Fixed
 
