@@ -22,4 +22,5 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#23](https://github.com/zfcampus/zf-apigility-documentation-swagger/pull/23)
+  updates the link to the Swagger website to point to the new swagger.io URL.
