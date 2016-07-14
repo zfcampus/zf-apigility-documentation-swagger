@@ -54,6 +54,6 @@ class Module
         $services = $app->getServiceManager();
         $view     = $services->get('View');
         $events   = $view->getEventManager();
-        $services->get(__NAMESPACE__ . '\SwaggerViewStrategy')->attach($events);
+        $services->get(SwaggerViewStrategy::class)->attach($events);
     }
 }
