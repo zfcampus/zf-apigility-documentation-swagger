@@ -6,13 +6,16 @@
 
 namespace ZF\Apigility\Documentation\Swagger;
 
-use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
+use Zend\EventManager\ListenerAggregateInterface;
+use Zend\EventManager\ListenerAggregateTrait;
 use Zend\View\Renderer\JsonRenderer;
 use Zend\View\ViewEvent;
 
-class SwaggerViewStrategy extends AbstractListenerAggregate
+class SwaggerViewStrategy implements ListenerAggregateInterface
 {
+    use ListenerAggregateTrait;
+
     /**
      * @var ViewModel
      */
@@ -32,8 +35,7 @@ class SwaggerViewStrategy extends AbstractListenerAggregate
     }
 
     /**
-     * @param EventManagerInterface $events
-     * @param int $priority
+     * {@inheritDoc}
      */
     public function attach(EventManagerInterface $events, $priority = 200)
     {

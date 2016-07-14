@@ -8,6 +8,7 @@ namespace ZFTest\Apigility\Documentation\Swagger;
 
 use PHPUnit_Framework_TestCase as TestCase;
 use Zend\EventManager\EventManager;
+use Zend\EventManager\Test\EventListenerIntrospectionTrait;
 use Zend\Http\Response as HttpResponse;
 use Zend\Stdlib\Response as StdlibResponse;
 use Zend\View\Renderer\JsonRenderer;
@@ -17,6 +18,8 @@ use ZF\Apigility\Documentation\Swagger\ViewModel;
 
 class SwaggerViewStrategyTest extends TestCase
 {
+    use EventListenerIntrospectionTrait;
+
     public function setUp()
     {
         $this->events   = new EventManager();
@@ -27,17 +30,19 @@ class SwaggerViewStrategyTest extends TestCase
 
     public function testStrategyAttachesToViewEventsAtPriority200()
     {
-        $listeners = $this->events->getListeners(ViewEvent::EVENT_RENDERER);
-        $this->assertEquals(1, count($listeners));
-        $listener = $listeners->top();
-        $this->assertEquals([$this->strategy, 'selectRenderer'], $listener->getCallback());
-        $this->assertEquals(200, $listener->getMetadatum('priority'));
+        $this->assertListenerAtPriority(
+            [$this->strategy, 'selectRenderer'],
+            200,
+            ViewEvent::EVENT_RENDERER,
+            $this->events
+        );
 
-        $listeners = $this->events->getListeners(ViewEvent::EVENT_RESPONSE);
-        $this->assertEquals(1, count($listeners));
-        $listener = $listeners->top();
-        $this->assertEquals([$this->strategy, 'injectResponse'], $listener->getCallback());
-        $this->assertEquals(200, $listener->getMetadatum('priority'));
+        $this->assertListenerAtPriority(
+            [$this->strategy, 'injectResponse'],
+            200,
+            ViewEvent::EVENT_RESPONSE,
+            $this->events
+        );
     }
 
     public function testSelectRendererReturnsJsonRendererWhenSwaggerViewModelIsPresentInEvent()
