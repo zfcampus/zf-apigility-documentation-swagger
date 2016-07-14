@@ -4,77 +4,79 @@
  * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
  */
 
-return array(
-    'router' => array(
-        'routes' => array(
-            'zf-apigility' => array(
-                'child_routes' => array(
-                    'swagger' => array(
-                        'type' => 'Zend\Mvc\Router\Http\Segment',
-                        'options' => array(
+namespace ZF\Apigility\Documentation\Swagger;
+
+return [
+    'router' => [
+        'routes' => [
+            'zf-apigility' => [
+                'child_routes' => [
+                    'swagger' => [
+                        'type' => 'segment',
+                        'options' => [
                             'route'    => '/swagger',
-                            'defaults' => array(
-                                'controller' => 'ZF\Apigility\Documentation\Swagger\SwaggerUi',
+                            'defaults' => [
+                                'controller' => SwaggerUi::class,
                                 'action'     => 'list',
-                            ),
-                        ),
+                            ],
+                        ],
                         'may_terminate' => true,
-                        'child_routes' => array(
-                            'api' => array(
-                                'type' => 'Segment',
-                                'options' => array(
+                        'child_routes' => [
+                            'api' => [
+                                'type' => 'segment',
+                                'options' => [
                                     'route' => '/:api',
-                                    'defaults' => array(
+                                    'defaults' => [
                                         'action' => 'show',
-                                    ),
-                                ),
+                                    ],
+                                ],
                                 'may_terminate' => true,
-                            ),
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
 
-    'service_manager' => array(
-        'factories' => array(
-            'ZF\Apigility\Documentation\Swagger\SwaggerViewStrategy' => 'ZF\Apigility\Documentation\Swagger\SwaggerViewStrategyFactory',
-        ),
-    ),
+    'service_manager' => [
+        'factories' => [
+            SwaggerViewStrategy::class => SwaggerViewStrategyFactory::class,
+        ],
+    ],
 
-    'controllers' => array(
-        'factories' => array(
-            'ZF\Apigility\Documentation\Swagger\SwaggerUi' => 'ZF\Apigility\Documentation\Swagger\SwaggerUiControllerFactory',
-        ),
-    ),
+    'controllers' => [
+        'factories' => [
+            SwaggerUi::class => SwaggerUiControllerFactory::class,
+        ],
+    ],
 
-    'view_manager' => array(
-        'template_path_stack' => array(
+    'view_manager' => [
+        'template_path_stack' => [
             'zf-apigility-documentation-swagger' => __DIR__ . '/../view',
-        ),
-    ),
+        ],
+    ],
 
-    'asset_manager' => array(
-        'resolver_configs' => array(
-            'paths' => array(
+    'asset_manager' => [
+        'resolver_configs' => [
+            'paths' => [
                 __DIR__ . '/../asset',
-            ),
-        ),
-    ),
+            ],
+        ],
+    ],
 
-    'zf-content-negotiation' => array(
-        'accept_whitelist' => array(
-            'ZF\Apigility\Documentation\Controller' => array(
+    'zf-content-negotiation' => [
+        'accept_whitelist' => [
+            'ZF\Apigility\Documentation\Controller' => [
                 0 => 'application/vnd.swagger+json',
-            ),
-        ),
-        'selectors' => array(
-            'Documentation' => array(
-                'ZF\Apigility\Documentation\Swagger\ViewModel' => array(
+            ],
+        ],
+        'selectors' => [
+            'Documentation' => [
+                ViewModel::class => [
                     'application/vnd.swagger+json',
-                ),
-            )
-        )
-    ),
-);
+                ],
+            ],
+        ],
+    ],
+];

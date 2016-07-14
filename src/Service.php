@@ -1,7 +1,7 @@
 <?php
 /**
  * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2014-2016 Zend Technologies USA Inc. (http://www.zend.com)
  */
 
 namespace ZF\Apigility\Documentation\Swagger;
@@ -44,33 +44,33 @@ class Service extends BaseService
         $templateParameters = [];
         foreach ($parameterMatches[1] as $paramSegmentName) {
             $templateParameters[$paramSegmentName] = [
-                'paramType' => 'path',
-                'name' => $paramSegmentName,
+                'paramType'   => 'path',
+                'name'        => $paramSegmentName,
                 'description' => 'URL parameter ' . $paramSegmentName,
-                'dataType' => 'string',
-                'required' => false,
-                'minimum' => 0,
-                'maximum' => 1
+                'dataType'    => 'string',
+                'required'    => false,
+                'minimum'     => 0,
+                'maximum'     => 1
             ];
         }
 
         $postPatchPutBodyParameter = [
-            'name' => 'body',
+            'name'      => 'body',
             'paramType' => 'body',
-            'required' => true,
-            'type' => $service->getName()
+            'required'  => true,
+            'type'      => $service->getName()
         ];
 
         $operationGroups = [];
 
         // if there is a routeIdentifierName, this is REST service, need to enumerate
         if ($service->routeIdentifierName) {
-            $entityOperations = [];
+            $entityOperations     = [];
             $collectionOperations = [];
 
             // find all COLLECTION operations
             foreach ($service->operations as $collectionOperation) {
-                $method               = $collectionOperation->getHttpMethod();
+                $method = $collectionOperation->getHttpMethod();
 
                 // collection parameters
                 $collectionParameters = $templateParameters;
@@ -125,8 +125,8 @@ class Service extends BaseService
             // find all other operations
             $operations = [];
             foreach ($service->operations as $operation) {
-                $method           = $operation->getHttpMethod();
-                $parameters       = array_values($templateParameters);
+                $method     = $operation->getHttpMethod();
+                $parameters = array_values($templateParameters);
 
                 if (in_array($method, ['POST', 'PUT', 'PATCH'])) {
                     $parameters[] = $postPatchPutBodyParameter;
