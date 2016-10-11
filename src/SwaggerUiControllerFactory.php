@@ -33,7 +33,7 @@ class SwaggerUiControllerFactory implements FactoryInterface
             ));
         }
 
-        return new SwaggerUiController($services->get(ApiFactory::class));
+        return new SwaggerUiController($container->get(ApiFactory::class));
     }
 
     /**
