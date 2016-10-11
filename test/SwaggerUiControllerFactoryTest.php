@@ -8,9 +8,11 @@ namespace ZFTest\Apigility\Documentation\Swagger;
 
 use PHPUnit_Framework_TestCase as TestCase;
 use Zend\ModuleManager\ModuleManager;
+use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use ZF\Apigility\Documentation\ApiFactory;
+use ZF\Apigility\Documentation\Swagger\SwaggerUiController;
 use ZF\Apigility\Documentation\Swagger\SwaggerUiControllerFactory;
 use ZF\Apigility\Provider\ApigilityProviderInterface;
 use ZF\Configuration\ModuleUtils;
@@ -27,25 +29,17 @@ class SwaggerUiControllerFactoryTest extends TestCase
      */
     protected $services;
 
-
     protected function setUp()
     {
         $this->factory = new SwaggerUiControllerFactory();
         $this->services = $services = new ServiceManager();
-
-        parent::setUp();
     }
 
-    /**
-     * @expectedException \Zend\ServiceManager\Exception\ServiceNotCreatedException
-     */
     public function testExceptionThrownOnMissingApiCreatorClass()
     {
         $smFactory = $this->factory;
-        $factory = $smFactory($this->services, 'SwaggerUiControllerFactory');
-        $this->assertInstanceOf('ZF\Apigility\Documentation\Swagger\SwaggerUiControllerFactory', $factory);
-
-        $factory();
+        $this->setExpectedException(ServiceNotCreatedException::class);
+        $factory = $smFactory($this->services, SwaggerUiController::class);
     }
 
     public function testCreatesServiceWithDefaults()
@@ -70,9 +64,9 @@ class SwaggerUiControllerFactoryTest extends TestCase
 
         /** @var SwaggerUiControllerFactory $service */
         $smFactory = $this->factory;
-        $this->assertInstanceOf('ZF\Apigility\Documentation\Swagger\SwaggerUiControllerFactory', $smFactory);
+        $this->assertInstanceOf(SwaggerUiControllerFactory::class, $smFactory);
 
-        $controller = $smFactory($this->services, 'SwaggerUiControllerFactory');
-        $this->assertInstanceOf('ZF\Apigility\Documentation\Swagger\SwaggerUiController', $controller);
+        $controller = $smFactory($this->services, SwaggerUiController::class);
+        $this->assertInstanceOf(SwaggerUiController::class, $controller);
     }
 }
