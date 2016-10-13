@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
  * @copyright Copyright (c) 2014-2016 Zend Technologies USA Inc. (http://www.zend.com)
@@ -7,179 +8,241 @@
 namespace ZF\Apigility\Documentation\Swagger;
 
 use ZF\Apigility\Documentation\Service as BaseService;
+use ZF\Apigility\Documentation\Operation;
+use ZF\Apigility\Documentation\Field;
 
-class Service extends BaseService
-{
-    /**
-     * @var BaseService
-     */
-    protected $service;
+class Service extends BaseService {
 
-    /**
-     * @param BaseService $service
-     * @param string $baseUrl
-     */
-    public function __construct(BaseService $service, $baseUrl)
-    {
-        $this->service = $service;
-        $this->baseUrl = $baseUrl;
-    }
+	const DEFAULT_TYPE = 'string';
 
-    /**
-     * @return array
-     */
-    public function toArray()
-    {
-        // localize service object for brevity
-        $service = $this->service;
+	/**
+	 * @var BaseService
+	 */
+	protected $service;
 
-        // routes and parameter mangling ([:foo] will become {foo}
-        $routeBasePath = substr($service->route, 0, strpos($service->route, '['));
-        $routeWithReplacements = str_replace(['[', ']', '{/', '{:'], ['{', '}', '/{', '{'], $service->route);
+	/**
+	 * @param BaseService $service
+	 */
+	public function __construct(BaseService $service)
+	{
+		$this->service = $service;
+	}
 
-        // find all parameters in Swagger naming format
-        preg_match_all('#{([\w\d_-]+)}#', $routeWithReplacements, $parameterMatches);
+	/**
+	 * @return array
+	 */
+	public function toArray()
+	{
+		return [
+			'paths' => $this->getPaths(),
+			'definitions' => $this->getDefinitions()
+		];
+	}
 
-        // parameters
-        $templateParameters = [];
-        foreach ($parameterMatches[1] as $paramSegmentName) {
-            $templateParameters[$paramSegmentName] = [
-                'paramType'   => 'path',
-                'name'        => $paramSegmentName,
-                'description' => 'URL parameter ' . $paramSegmentName,
-                'dataType'    => 'string',
-                'required'    => false,
-                'minimum'     => 0,
-                'maximum'     => 1
-            ];
-        }
+	protected function getPaths()
+	{
+		$route = $this->getRouteWithReplacements();
+		if ($this->isRestService()) {
+			return $this->getRestPaths($route);
+		}
+		return $this->getOtherPaths($route);
+	}
 
-        $postPatchPutBodyParameter = [
-            'name'      => 'body',
-            'paramType' => 'body',
-            'required'  => true,
-            'type'      => $service->getName()
-        ];
+	protected function getRouteWithReplacements()
+	{
+		// routes and parameter mangling ([:foo] will become {foo}
+		$search = ['[', ']', '{/', '{:'];
+		$replace = ['{', '}', '/{', '{'];
+		return str_replace($search, $replace, $this->service->route);
+	}
 
-        $operationGroups = [];
+	protected function isRestService()
+	{
+		return ($this->service->routeIdentifierName);
+	}
 
-        // if there is a routeIdentifierName, this is REST service, need to enumerate
-        if ($service->routeIdentifierName) {
-            $entityOperations     = [];
-            $collectionOperations = [];
+	protected function getRestPaths($route)
+	{
+		$entityOperations = $this->getEntityOperationsData($route);
+		$collectionOperations = $this->getCollectionOperationsData($route);
+		$collectionPath = str_replace(
+			'/{' . $this->service->routeIdentifierName . '}', '', $route);
+		if ($collectionPath === $route) {
+			return [
+				$collectionPath => array_merge(
+					$collectionOperations, $entityOperations)
+			];
+		}
+		return [
+			$collectionPath => $collectionOperations,
+			$route => $entityOperations
+		];
+	}
 
-            // find all COLLECTION operations
-            foreach ($service->operations as $collectionOperation) {
-                $method = $collectionOperation->getHttpMethod();
+	protected function getOtherPaths($route)
+	{
+		$operations = $this->getOtherOperationsData($route);
+		return [$route => $operations];
+	}
 
-                // collection parameters
-                $collectionParameters = $templateParameters;
-                unset($collectionParameters[$service->routeIdentifierName]);
-                $collectionParameters = array_values($collectionParameters);
+	protected function getEntityOperationsData($route)
+	{
+		$urlParameters = $this->getURLParametersRequired($route);
+		$operations = $this->service->entityOperations;
+		return $this->getOperationsData($operations, $urlParameters);
+	}
 
-                if (in_array($method, ['POST', 'PUT', 'PATCH'])) {
-                    $collectionParameters[] = $postPatchPutBodyParameter;
-                }
+	protected function getCollectionOperationsData($route)
+	{
+		$urlParameters = $this->getURLParametersNotRequired($route);
+		unset($urlParameters[$this->service->routeIdentifierName]);
+		$operations = $this->service->operations;
+		return $this->getOperationsData($operations, $urlParameters);
+	}
 
-                $collectionOperations[] = [
-                    'method'           => $method,
-                    'summary'          => $collectionOperation->getDescription(),
-                    'notes'            => $collectionOperation->getDescription(),
-                    'nickname'         => $method . ' for ' . $service->getName(),
-                    'type'             => $service->getName(),
-                    'parameters'       => $collectionParameters,
-                    'responseMessages' => $collectionOperation->getResponseStatusCodes(),
-                ];
-            }
+	protected function getOtherOperationsData($route)
+	{
+		$urlParameters = $this->getURLParametersRequired($route);
+		$operations = $this->service->operations;
+		return $this->getOperationsData($operations, $urlParameters);
+	}
 
-            // find all ENTITY operations
-            foreach ($service->entityOperations as $entityOperation) {
-                $method           = $entityOperation->getHttpMethod();
-                $entityParameters = array_values($templateParameters);
+	protected function getOperationsData($operations, $urlParameters)
+	{
+		$operationsData = [];
+		foreach ($operations as $operation) {
+			$method = $this->getMethodFromOperation($operation);
+			$parameters = array_values($urlParameters);
+			if ($this->isMethodPostPutOrPatch($method)) {
+				$parameters[] = $this->getPostPatchPutBodyParameter();
+			}
+			$pathOperation = $this->getPathOperation($operation, $parameters);
+			$operationsData[$method] = $pathOperation;
+		}
+		return $operationsData;
+	}
 
-                if (in_array($method, ['POST', 'PUT', 'PATCH'])) {
-                    $entityParameters[] = $postPatchPutBodyParameter;
-                }
+	protected function getURLParametersRequired($route)
+	{
+		return $this->getURLParameters($route, true);
+	}
 
-                $entityOperations[] = [
-                    'method'           => $method,
-                    'summary'          => $entityOperation->getDescription(),
-                    'notes'            => $entityOperation->getDescription(),
-                    'nickname'         => $method . ' for ' . $service->getName(),
-                    'type'             => $service->getName(),
-                    'parameters'       => $entityParameters,
-                    'responseMessages' => $entityOperation->getResponseStatusCodes(),
-                ];
-            }
+	protected function getURLParametersNotRequired($route)
+	{
+		return $this->getURLParameters($route, false);
+	}
 
-            $operationGroups[] = [
-                'operations' => $collectionOperations,
-                'path'       => str_replace('/{' . $service->routeIdentifierName . '}', '', $routeWithReplacements)
-            ];
+	protected function getURLParameters($route, $required)
+	{
+		// find all parameters in Swagger naming format
+		preg_match_all('#{([\w\d_-]+)}#', $route, $parameterMatches);
 
-            $operationGroups[] = [
-                'operations' => $entityOperations,
-                'path' => $routeWithReplacements
-            ];
-        } else {
-            // find all other operations
-            $operations = [];
-            foreach ($service->operations as $operation) {
-                $method     = $operation->getHttpMethod();
-                $parameters = array_values($templateParameters);
+		$templateParameters = [];
+		foreach ($parameterMatches[1] as $paramSegmentName) {
+			$templateParameters[$paramSegmentName] = [
+				'in' => 'path',
+				'name' => $paramSegmentName,
+				'description' => 'URL parameter ' . $paramSegmentName,
+				'type' => 'string',
+				'required' => $required,
+				'minimum' => 0,
+				'maximum' => 1
+			];
+		}
+		return $templateParameters;
+	}
 
-                if (in_array($method, ['POST', 'PUT', 'PATCH'])) {
-                    $parameters[] = $postPatchPutBodyParameter;
-                }
+	protected function getPostPatchPutBodyParameter()
+	{
+		return [
+			'in' => 'body',
+			'name' => 'body',
+			'required' => true,
+			'schema' => [
+				'$ref' => '#/definitions/' . $this->service->getName()
+			]
+		];
+	}
 
-                $operations[] = [
-                    'method'           => $method,
-                    'summary'          => $operation->getDescription(),
-                    'notes'            => $operation->getDescription(),
-                    'nickname'         => $method . ' for ' . $service->getName(),
-                    'type'             => $service->getName(),
-                    'parameters'       => $parameters,
-                    'responseMessages' => $operation->getResponseStatusCodes(),
-                ];
-            }
-            $operationGroups[] = [
-                'operations' => $operations,
-                'path'       => $routeWithReplacements
-            ];
-        }
+	protected function isMethodPostPutOrPatch($method)
+	{
+		return in_array($method, ['post', 'put', 'patch']);
+	}
 
-        // Fields are part of the default input filter when present.
-        $fields = $service->fields;
-        if (isset($fields['input_filter'])) {
-            $fields = $fields['input_filter'];
-        }
+	protected function getMethodFromOperation(Operation $operation)
+	{
+		return strtolower($operation->getHttpMethod());
+	}
 
-        $requiredProperties = $properties = [];
-        foreach ($fields as $field) {
-            $properties[$field->getName()] = [
-                'type' => method_exists($field, 'getFieldType') ? $field->getFieldType() : 'string',
-                'dataType' => method_exists($field, 'getFieldType') ? $field->getFieldType() : 'string',
-                'description' => $field->getDescription()
-            ];
-            if ($field->isRequired()) {
-                $requiredProperties[] = $field->getName();
-            }
-        }
+	protected function getPathOperation(Operation $operation, $parameters)
+	{
+		return $this->cleanEmptyValues([
+				'description' => $operation->getDescription(),
+				'parameters' => $parameters,
+				'produces' => $this->service->getRequestAcceptTypes(),
+				'responses' => $this->getResponsesFromOperation($operation)
+		]);
+	}
 
-        return [
-            'apiVersion'     => $service->api->getVersion(),
-            'swaggerVersion' => '1.2',
-            'basePath'       => $this->baseUrl,
-            'resourcePath'   => $routeBasePath,
-            'apis'           => $operationGroups,
-            'produces'       => $service->requestAcceptTypes,
-            'models'         => [
-                $service->getName() => [
-                    'id'         => $service->getName(),
-                    'required'   => $requiredProperties,
-                    'properties' => $properties,
-                ],
-            ],
-        ];
-    }
+	protected function getResponsesFromOperation(Operation $operation)
+	{
+		$responses = [];
+		$responseStatusCodes = $operation->getResponseStatusCodes();
+		foreach ($responseStatusCodes as $responseStatusCode) {
+			$responses[$responseStatusCode['code']] = [
+				'description' => $responseStatusCode['message']
+			];
+		}
+		return $responses;
+	}
+
+	protected function getDefinitions()
+	{
+		$required = $properties = [];
+		$fields = $this->getFieldsForDefinitions();
+		foreach ($fields as $field) {
+			$properties[$field->getName()] = $this->getFieldProperties($field);
+			if ($field->isRequired()) {
+				$required[] = $field->getName();
+			}
+		}
+		$model = $this->cleanEmptyValues([
+			'properties' => $properties,
+			'required' => $required
+		]);
+		return [$this->service->getName() => $model];
+	}
+
+	protected function getFieldsForDefinitions()
+	{
+		// Fields are part of the default input filter when present.
+		$fields = $this->service->fields;
+		if (isset($fields['input_filter'])) {
+			$fields = $fields['input_filter'];
+		}
+		return $fields;
+	}
+
+	protected function getFieldProperties(Field $field)
+	{
+		return $this->cleanEmptyValues([
+				'type' => $this->getFieldType($field),
+				'description' => $field->getDescription()
+		]);
+	}
+
+	protected function getFieldType(Field $field)
+	{
+		return (method_exists($field, 'getFieldType') &&
+			!empty($field->getFieldType())) ?
+			$field->getFieldType() : self::DEFAULT_TYPE;
+	}
+
+	protected function cleanEmptyValues(array $data)
+	{
+		return array_filter($data, function($item) {
+			return !empty($item);
+		});
+	}
+
 }

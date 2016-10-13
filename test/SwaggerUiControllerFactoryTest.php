@@ -10,7 +10,6 @@ use PHPUnit_Framework_TestCase as TestCase;
 use Zend\ModuleManager\ModuleManager;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\ServiceManager;
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use ZF\Apigility\Documentation\ApiFactory;
 use ZF\Apigility\Documentation\Swagger\SwaggerUiController;
 use ZF\Apigility\Documentation\Swagger\SwaggerUiControllerFactory;
@@ -33,8 +32,13 @@ class SwaggerUiControllerFactoryTest extends TestCase
     {
         $this->factory = new SwaggerUiControllerFactory();
         $this->services = $services = new ServiceManager();
+
+        parent::setUp();
     }
 
+    /**
+     * @expectedException \Zend\ServiceManager\Exception\ServiceNotCreatedException
+     */
     public function testExceptionThrownOnMissingApiCreatorClass()
     {
         $smFactory = $this->factory;

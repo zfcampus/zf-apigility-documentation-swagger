@@ -13,7 +13,7 @@ class ViewModel extends JsonModel
     /**
      * @return array|\Traversable
      */
-    public function getVariables()
+	public function getVariables()
     {
         if (! array_key_exists('type', $this->variables)
             || empty($this->variables['type'])
@@ -26,9 +26,6 @@ class ViewModel extends JsonModel
                 return $this->variables['documentation'];
             case 'api':
                 $model = new Api($this->variables['documentation']);
-                return $model->toArray();
-            case 'service':
-                $model = new Service($this->variables['documentation'], $this->variables['baseUrl']);
                 return $model->toArray();
         }
     }
