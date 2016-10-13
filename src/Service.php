@@ -207,6 +207,7 @@ class Service extends BaseService
             }
         }
         $model = $this->cleanEmptyValues([
+            'type' => 'object',
             'properties' => $properties,
             'required' => $required
         ]);

@@ -763,8 +763,11 @@
 		}
 	},
 	"definitions": {
-		"BooBaz": {},
+		"BooBaz": {
+            "type": "object"
+        },
 		"EntityFields": {
+            "type": "object",
 			"properties": {
 				"test": {
 					"description": "test",
@@ -776,6 +779,7 @@
 			]
 		},
 		"FooBar": {
+            "type": "object",
 			"properties": {
 				"bergoo": {
 					"type": "string"
@@ -803,6 +807,7 @@
 			]
 		},
 		"FooBarCollection": {
+            "type": "object",
 			"properties": {
 				"AnotherCollection[]/FooBar": {
 					"type": "string"
@@ -816,7 +821,11 @@
 				"AnotherCollection[]/FooBar"
 			]
 		},
-		"MyRpc": {},
-		"Ping": {}
+		"MyRpc": {
+            "type": "object"
+        },
+		"Ping": {
+            "type": "object"
+        }
 	}
 }
