@@ -176,6 +176,7 @@ class Service extends BaseService
     protected function getPathOperation(Operation $operation, $parameters)
     {
         return $this->cleanEmptyValues([
+                'tags' => [$this->service->getName()],
                 'description' => $operation->getDescription(),
                 'parameters' => $parameters,
                 'produces' => $this->service->getRequestAcceptTypes(),

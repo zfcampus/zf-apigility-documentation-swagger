@@ -7,6 +7,7 @@
 	"paths": {
 		"/boo-baz": {
 			"get": {
+                "tags" : ["BooBaz"],
 				"produces": [
 					"application/vnd.test.v1+json",
 					"application/hal+json",
@@ -25,6 +26,7 @@
 				}
 			},
 			"post": {
+                "tags" : ["BooBaz"],
 				"parameters": [
 					{
 						"in": "body",
@@ -55,6 +57,7 @@
 		},
 		"/boo-baz/{boo_baz_id}": {
 			"delete": {
+                "tags" : ["BooBaz"],
 				"parameters": [
 					{
 						"description": "URL parameter boo_baz_id",
@@ -93,6 +96,7 @@
 				}
 			},
 			"get": {
+                "tags" : ["BooBaz"],
 				"parameters": [
 					{
 						"description": "URL parameter boo_baz_id",
@@ -125,6 +129,7 @@
 				}
 			},
 			"patch": {
+                "tags" : ["BooBaz"],
 				"parameters": [
 					{
 						"description": "URL parameter boo_baz_id",
@@ -171,6 +176,7 @@
 				}
 			},
 			"put": {
+                "tags" : ["BooBaz"],
 				"parameters": [
 					{
 						"description": "URL parameter boo_baz_id",
@@ -219,6 +225,7 @@
 		},
 		"/entity-fields": {
 			"put": {
+                "tags" : ["EntityFields"],
 				"parameters": [
 					{
 						"in": "body",
@@ -258,6 +265,7 @@
 		},
 		"/foo-bar": {
 			"get": {
+                "tags" : ["FooBar"],
 				"description": "Collection FooBar GET!",
 				"produces": [
 					"application/vnd.test.v1+json",
@@ -277,6 +285,7 @@
 				}
 			},
 			"post": {
+                "tags" : ["FooBar"],
 				"parameters": [
 					{
 						"in": "body",
@@ -319,6 +328,7 @@
 		},
 		"/foo-bar/{foo_bar_id}": {
 			"delete": {
+                "tags" : ["FooBar"],
 				"parameters": [
 					{
 						"description": "URL parameter foo_bar_id",
@@ -357,6 +367,7 @@
 				}
 			},
 			"get": {
+                "tags" : ["FooBar"],
 				"parameters": [
 					{
 						"description": "URL parameter foo_bar_id",
@@ -389,6 +400,7 @@
 				}
 			},
 			"patch": {
+                "tags" : ["FooBar"],
 				"parameters": [
 					{
 						"description": "URL parameter foo_bar_id",
@@ -441,6 +453,7 @@
 				}
 			},
 			"put": {
+                "tags" : ["FooBar"],
 				"parameters": [
 					{
 						"description": "URL parameter foo_bar_id",
@@ -495,6 +508,7 @@
 		},
 		"/foo-bar-collection": {
 			"get": {
+                "tags" : ["FooBarCollection"],
 				"produces": ["application/vnd.test.v1+json", "application/hal+json", "application/json"],
 				"responses": {
 					"406": {
@@ -509,6 +523,7 @@
 				}
 			},
 			"post": {
+                "tags" : ["FooBarCollection"],
 				"parameters": [{
 						"in": "body",
 						"name": "body",
@@ -543,8 +558,9 @@
 				}
 			}
 		},
-	"/foo-bar-collection/{foo_bar_collection_id}": {
+        "/foo-bar-collection/{foo_bar_collection_id}": {
 			"get": {
+                "tags" : ["FooBarCollection"],
 				"parameters": [{
 						"in": "path",
 						"name": "foo_bar_collection_id",
@@ -571,6 +587,7 @@
 				}
 			},
 			"patch": {
+                "tags" : ["FooBarCollection"],
 				"parameters": [{
 						"in": "path",
 						"name": "foo_bar_collection_id",
@@ -616,6 +633,7 @@
 				}
 			},
 			"put": {
+                "tags" : ["FooBarCollection"],
 				"parameters": [{
 						"in": "path",
 						"name": "foo_bar_collection_id",
@@ -661,6 +679,7 @@
 				}
 			},
 			"delete": {
+                "tags" : ["FooBarCollection"],
 				"parameters": [{
 						"in": "path",
 						"name": "foo_bar_collection_id",
@@ -695,6 +714,7 @@
 		},
 		"/my-rpc": {
 			"get": {
+                "tags" : ["MyRpc"],
 				"produces": [
 					"application/vnd.test.v1+json",
 					"application/json",
@@ -721,6 +741,7 @@
 		},
 		"/ping": {
 			"get": {
+                "tags" : ["Ping"],
 				"description": "Ping the API to see uptime and network lag",
 				"produces": [
 					"application/vnd.test.v1+json",
