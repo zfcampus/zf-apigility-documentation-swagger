@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
  * @copyright Copyright (c) 2014-2016 Zend Technologies USA Inc. (http://www.zend.com)
@@ -10,13 +11,13 @@ use ZF\ContentNegotiation\JsonModel;
 
 class ViewModel extends JsonModel
 {
+
     /**
      * @return array|\Traversable
      */
-	public function getVariables()
+    public function getVariables()
     {
-        if (! array_key_exists('type', $this->variables)
-            || empty($this->variables['type'])
+        if (!array_key_exists('type', $this->variables) || empty($this->variables['type'])
         ) {
             return $this->variables;
         }

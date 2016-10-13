@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
  * @copyright Copyright (c) 2014 Zend Technologies USA Inc. (http://www.zend.com)
@@ -10,6 +11,7 @@ use ZF\Apigility\Documentation\Api as BaseApi;
 
 class Api extends BaseApi
 {
+
     /**
      * @var BaseApi
      */
@@ -28,17 +30,17 @@ class Api extends BaseApi
      */
     public function toArray()
     {
-		$output = [
+        $output = [
             'swagger' => '2.0',
-			'info' => [
-				'title' => $this->api->getName(),
-				'version' => $this->api->getVersion()
-			]
+            'info' => [
+                'title' => $this->api->getName(),
+                'version' => $this->api->getVersion()
+            ]
         ];
-		foreach ($this->api->services as $service) {
-			$outputService = new Service($service);
-			$output = array_merge_recursive($output, $outputService->toArray());
-		}
-		return $output;
+        foreach ($this->api->services as $service) {
+            $outputService = new Service($service);
+            $output = array_merge_recursive($output, $outputService->toArray());
+        }
+        return $output;
     }
 }
