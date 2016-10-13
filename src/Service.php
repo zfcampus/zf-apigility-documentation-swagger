@@ -35,8 +35,19 @@ class Service extends BaseService
     public function toArray()
     {
         return [
+            'tags' => $this->getTags(),
             'paths' => $this->getPaths(),
             'definitions' => $this->getDefinitions()
+        ];
+    }
+
+    protected function getTags()
+    {
+        return [
+            $this->cleanEmptyValues([
+                'name' => $this->service->getName(),
+                'description' => $this->service->getDescription()
+            ])
         ];
     }
 
