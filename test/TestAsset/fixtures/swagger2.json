@@ -766,7 +766,18 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "ack": {
+                                    "type": "integer"
+                                }
+                            },
+                            "example": {
+                                "ack": 123456789
+                            }
+                        }
                     },
                     "406": {
                         "description": "Not Acceptable"

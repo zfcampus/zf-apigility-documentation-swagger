@@ -10,6 +10,7 @@ namespace ZF\Apigility\Documentation\Swagger;
 use ZF\Apigility\Documentation\Service as BaseService;
 use ZF\Apigility\Documentation\Operation;
 use ZF\Apigility\Documentation\Field;
+use ZF\Apigility\Documentation\Swagger\Model\ModelGenerator;
 
 class Service extends BaseService
 {
@@ -20,6 +21,7 @@ class Service extends BaseService
      * @var BaseService
      */
     protected $service;
+    protected $modelGenerator;
 
     /**
      * @param BaseService $service
@@ -27,6 +29,7 @@ class Service extends BaseService
     public function __construct(BaseService $service)
     {
         $this->service = $service;
+        $this->modelGenerator = new ModelGenerator();
     }
 
     /**
@@ -200,11 +203,20 @@ class Service extends BaseService
         $responses = [];
         $responseStatusCodes = $operation->getResponseStatusCodes();
         foreach ($responseStatusCodes as $responseStatusCode) {
-            $responses[$responseStatusCode['code']] = [
-                'description' => $responseStatusCode['message']
-            ];
+            $code = intval($responseStatusCode['code']);
+            $responses[$code] = $this->cleanEmptyValues([
+                'description' => $responseStatusCode['message'],
+                'schema' => $this->getResponseSchema($operation, $code)
+            ]);
         }
         return $responses;
+    }
+
+    protected function getResponseSchema(Operation $operation, $code)
+    {
+        if ($code === 200 || $code === 201) {
+            return $this->modelGenerator->generate($operation->getResponseDescription());
+        }
     }
 
     protected function getDefinitions()
