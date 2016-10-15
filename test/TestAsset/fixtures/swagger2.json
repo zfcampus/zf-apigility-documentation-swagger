@@ -831,7 +831,11 @@
                 "foogoober/subgoober",
                 "foofoogoober/subgoober/subgoober",
                 "name/name"
-            ]
+            ],
+            "example": {
+                "goober": "Example goober value",
+                "bergoo": "Example bergoo value"
+            }
         },
         "FooBarCollection": {
             "type": "object",

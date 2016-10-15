@@ -45,7 +45,10 @@ return [
             ],
             'POST' => [
                 'description' => null,
-                'request' => null,
+                'request' => '{
+    "goober": "Example goober value",
+    "bergoo": "Example bergoo value"
+}',
                 'response' => null,
             ],
             'description' => 'Some general notes about he FooBar collections',

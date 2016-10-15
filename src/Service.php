@@ -221,6 +221,14 @@ class Service extends BaseService
 
     protected function getDefinitions()
     {
+        $modelFromFields = $this->getModelFromFields();
+        $modelFromPostDescription = $this->getModelFromFirstPostDescription();
+        $model = array_replace_recursive($modelFromPostDescription, $modelFromFields);
+        return [$this->service->getName() => $model];
+    }
+
+    protected function getModelFromFields()
+    {
         $required = $properties = [];
         $fields = $this->getFieldsForDefinitions();
         foreach ($fields as $field) {
@@ -229,12 +237,28 @@ class Service extends BaseService
                 $required[] = $field->getName();
             }
         }
-        $model = $this->cleanEmptyValues([
+        return $this->cleanEmptyValues([
             'type' => 'object',
             'properties' => $properties,
             'required' => $required
         ]);
-        return [$this->service->getName() => $model];
+    }
+
+    protected function getModelFromFirstPostDescription()
+    {
+        $firstPostDescription = $this->getFirstPostRequestDescription();
+        $model = $this->modelGenerator->generate($firstPostDescription);
+        return $model ? $model : [];
+    }
+
+    protected function getFirstPostRequestDescription()
+    {
+        foreach ($this->service->getOperations() as $operation) {
+            $method = $this->getMethodFromOperation($operation);
+            if ($method === 'post') {
+                return $operation->getRequestDescription();
+            }
+        }
     }
 
     protected function getFieldsForDefinitions()
