@@ -879,12 +879,6 @@
                 "AnotherCollection[]/FooBar"
             ]
         },
-        "MyRpc": {
-            "type": "object"
-        },
-        "Ping": {
-            "type": "object"
-        },
         "OnlyPost": {
             "type": "object"
         }

@@ -101,7 +101,7 @@ class Service extends BaseService
     protected function getEntityOperationsData($route)
     {
         $urlParameters = $this->getURLParametersRequired($route);
-        $operations = $this->service->entityOperations;
+        $operations = $this->service->getEntityOperations();
         return $this->getOperationsData($operations, $urlParameters);
     }
 
@@ -221,10 +221,23 @@ class Service extends BaseService
 
     protected function getDefinitions()
     {
+        if (!$this->serviceContainsPostPutOrPatchMethod()) {
+            return [];
+        }
         $modelFromFields = $this->getModelFromFields();
         $modelFromPostDescription = $this->getModelFromFirstPostDescription();
         $model = array_replace_recursive($modelFromPostDescription, $modelFromFields);
         return [$this->service->getName() => $model];
+    }
+
+    protected function serviceContainsPostPutOrPatchMethod()
+    {
+        foreach ($this->getAllOperations() as $operation) {
+            $method = $this->getMethodFromOperation($operation);
+            if ($this->isMethodPostPutOrPatch($method)) {
+                return true;
+            }
+        }
     }
 
     protected function getModelFromFields()
@@ -238,9 +251,9 @@ class Service extends BaseService
             }
         }
         return $this->cleanEmptyValues([
-            'type' => 'object',
-            'properties' => $properties,
-            'required' => $required
+                'type' => 'object',
+                'properties' => $properties,
+                'required' => $required
         ]);
     }
 
@@ -253,7 +266,7 @@ class Service extends BaseService
 
     protected function getFirstPostRequestDescription()
     {
-        foreach ($this->service->getOperations() as $operation) {
+        foreach ($this->getAllOperations() as $operation) {
             $method = $this->getMethodFromOperation($operation);
             if ($method === 'post') {
                 return $operation->getRequestDescription();
@@ -284,6 +297,16 @@ class Service extends BaseService
         return (method_exists($field, 'getFieldType') &&
             !empty($field->getFieldType())) ?
             $field->getFieldType() : self::DEFAULT_TYPE;
+    }
+
+    protected function getAllOperations()
+    {
+        $entityOperations = $this->service->getEntityOperations();
+        if (is_array($entityOperations)) {
+            return array_merge(
+                $this->service->getOperations(), $this->service->getEntityOperations());
+        }
+        return $this->service->getOperations();
     }
 
     protected function cleanEmptyValues(array $data)

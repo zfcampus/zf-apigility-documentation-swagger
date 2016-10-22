@@ -34,7 +34,7 @@ class Api extends BaseApi
             'swagger' => '2.0',
             'info' => [
                 'title' => $this->api->getName(),
-                'version' => $this->api->getVersion()
+                'version' => (string)$this->api->getVersion()
             ]
         ];
         foreach ($this->api->services as $service) {
