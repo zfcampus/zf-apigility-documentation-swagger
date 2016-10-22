@@ -15,6 +15,8 @@
             "name": "FooBar",
             "description": "Some general notes about the FooBar rest service"
         }, {
+            "name": "OnlyPost"
+        }, {
             "name": "MyRpc"
         }, {
             "name": "Ping",
@@ -787,6 +789,31 @@
                     }
                 }
             }
+        },
+        "/only-post": {
+            "post": {
+                "tags": ["OnlyPost"],
+                "parameters": [{
+                        "in": "body",
+                        "name": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/OnlyPost"
+                        }
+                    }],
+                "produces": ["application/vnd.foo.v1+json", "application/hal+json", "application/json"],
+                "responses": {
+                    "406": {
+                        "description": "Not Acceptable"
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type"
+                    },
+                    "201": {
+                        "description": "Created"
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -856,6 +883,9 @@
             "type": "object"
         },
         "Ping": {
+            "type": "object"
+        },
+        "OnlyPost": {
             "type": "object"
         }
     }

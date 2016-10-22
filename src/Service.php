@@ -39,7 +39,7 @@ class Service extends BaseService
     {
         return [
             'tags' => $this->getTags(),
-            'paths' => $this->getPaths(),
+            'paths' => $this->cleanEmptyValues($this->getPaths()),
             'definitions' => $this->getDefinitions()
         ];
     }

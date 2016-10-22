@@ -64,7 +64,16 @@ return [
                     ],
                 ],
             ],
-        ],
+            'test.rest.only-post' => [
+                'type' => 'Segment',
+                'options' => [
+                    'route' => '/only-post[/:only_post_id]',
+                    'defaults' => [
+                        'controller' => 'Test\\V1\\Rest\\OnlyPost\\Controller',
+                        ],
+                    ],
+                ],
+            ],
     ],
     'zf-versioning' => [
         'uri' => [
@@ -73,6 +82,7 @@ return [
             2 => 'test.rpc.my-rpc',
             3 => 'test.rpc.ping',
             4 => 'test.rest.foo-bar-collection',
+            5 => 'test.rest.only-post',
         ],
     ],
     'service_manager' => [
@@ -80,6 +90,7 @@ return [
             'Test\\V1\\Rest\\FooBar\\FooBarResource' => 'Test\\V1\\Rest\\FooBar\\FooBarResource',
             'Test\\V1\\Rest\\FooBarCollection\\FooBarResource' => 'Test\\V1\\Rest\\FooBarCollection\\FooBarResource',
             'Test\\V1\\Rest\\BooBaz\\BooBazResource' => 'Test\\V1\\Rest\\BooBaz\\BooBazResource',
+            'Test\\V1\\Rest\\OnlyPost\\OnlyPostResource' => 'Test\\V1\\Rest\\OnlyPost\\OnlyPostResource',
         ],
     ],
     'zf-rest' => [
@@ -166,6 +177,23 @@ return [
             'collection_class' => 'Test\\V1\\Rest\\EntityFields\\EntityFieldsCollection',
             'service_name' => 'EntityFields',
         ],
+        'Test\\V1\\Rest\\OnlyPost\\Controller' => [
+            'listener' => 'Test\\V1\\Rest\\OnlyPost\\OnlyPostResource',
+            'route_name' => 'test.rest.only-post',
+            'route_identifier_name' => 'only_post_id',
+            'collection_name' => 'only_post',
+            'entity_http_methods' => [],
+            'collection_http_methods' => [
+                0 => 'POST',
+            ],
+            'collection_query_whitelist' => [],
+            'page_size' => 25,
+            'page_size_param' => null,
+            'entity_class' => 'Test\\V1\\Rest\\OnlyPost\\OnlyPostEntity',
+            'collection_class' => 'Test\\V1\\Rest\\OnlyPost\\OnlyPostCollection',
+            'service_name' => 'OnlyPost',
+        ],
+
     ],
     'zf-content-negotiation' => [
         'controllers' => [
@@ -174,6 +202,7 @@ return [
             'Test\\V1\\Rest\\BooBaz\\Controller' => 'HalJson',
             'Test\\V1\\Rpc\\MyRpc\\Controller' => 'Json',
             'Test\\V1\\Rpc\\Ping\\Controller' => 'Json',
+            'Test\\V1\\Rest\\OnlyPost\\Controller' => 'HalJson',
         ],
         'accept_whitelist' => [
             'Test\\V1\\Rest\\FooBar\\Controller' => [
@@ -206,6 +235,11 @@ return [
                 1 => 'application/json',
                 2 => 'application/*+json',
             ],
+            'Test\\V1\\Rest\\OnlyPost\\Controller' => [
+                0 => 'application/vnd.foo.v1+json',
+                1 => 'application/hal+json',
+                2 => 'application/json',
+            ],
         ],
         'content_type_whitelist' => [
             'Test\\V1\\Rest\\FooBar\\Controller' => [
@@ -230,6 +264,10 @@ return [
             ],
             'Test\\V1\\Rpc\\EntityFields\\Controller' => [
                 0 => 'application/vnd.test.v1+json',
+                1 => 'application/json',
+            ],
+            'Test\\V1\\Rest\\OnlyPost\\Controller' => [
+                0 => 'application/vnd.foo.v1+json',
                 1 => 'application/json',
             ],
         ],
@@ -264,6 +302,18 @@ return [
                 'entity_identifier_name' => 'id',
                 'route_name' => 'test.rest.entity-fields',
                 'route_identifier_name' => 'id',
+                'is_collection' => true,
+            ],
+            'Test\\V1\\Rest\\OnlyPost\\OnlyPostEntity' => [
+                'entity_identifier_name' => 'id',
+                'route_name' => 'test.rest.only-post',
+                'route_identifier_name' => 'only_post_id',
+                'hydrator' => 'Zend\\Hydrator\\ArraySerializable',
+            ],
+            'Test\\V1\\Rest\\OnlyPost\\OnlyPostCollection' => [
+                'entity_identifier_name' => 'id',
+                'route_name' => 'test.rest.only-post',
+                'route_identifier_name' => 'only_post_id',
                 'is_collection' => true,
             ],
         ],
