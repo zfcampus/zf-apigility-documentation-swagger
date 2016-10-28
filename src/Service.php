@@ -16,6 +16,7 @@ class Service extends BaseService
 {
 
     const DEFAULT_TYPE = 'string';
+    const ARRAY_TYPE = 'array';
 
     /**
      * @var BaseService
@@ -286,10 +287,15 @@ class Service extends BaseService
 
     protected function getFieldProperties(Field $field)
     {
-        return $this->cleanEmptyValues([
-                'type' => $this->getFieldType($field),
-                'description' => $field->getDescription()
-        ]);
+        $type = $this->getFieldType($field);
+        $properties = [
+            'type' => $type,
+            'description' => $field->getDescription()
+        ];
+        if ($type === self::ARRAY_TYPE) {
+            $properties['items'] = ['type' => self::DEFAULT_TYPE];
+        }
+        return $this->cleanEmptyValues($properties);
     }
 
     protected function getFieldType(Field $field)

@@ -351,6 +351,9 @@ return [
             'input_filter' => 'Test\\V1\\Rest\\EntityFields\\Validator',
             'PUT' => 'Test\\V1\\Rest\\EntityFields\\Validator\\Put',
         ],
+        'Test\\V1\\Rest\\OnlyPost\\Controller' => [
+            'input_filter' => 'Foo\\V1\\Rest\\OnlyPost\\Validator',
+        ],
     ],
     'input_filter_specs' => [
         'Test\\V1\\Rest\\FooBar\\Validator' => [
@@ -455,6 +458,16 @@ return [
                 'filters' => [],
                 'name' => 'test_put',
                 'description' => 'test_put',
+            ],
+        ],
+        'Foo\\V1\\Rest\\OnlyPost\\Validator' => [
+            0 => [
+                'required' => true,
+                'validators' => [],
+                'filters' => [],
+                'name' => 'mylist',
+                'description' => 'My list field',
+                'field_type' => 'array',
             ],
         ],
     ],

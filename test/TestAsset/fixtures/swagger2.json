@@ -803,11 +803,17 @@
                     }],
                 "produces": ["application/vnd.foo.v1+json", "application/hal+json", "application/json"],
                 "responses": {
+                    "400": {
+                        "description": "Client Error"
+                    },
                     "406": {
                         "description": "Not Acceptable"
                     },
                     "415": {
                         "description": "Unsupported Media Type"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
                     },
                     "201": {
                         "description": "Created"
@@ -880,7 +886,17 @@
             ]
         },
         "OnlyPost": {
-            "type": "object"
+            "type": "object",
+            "properties": {
+                "mylist": {
+                    "type": "array",
+                    "description": "My list field",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "required": ["mylist"]
         }
     }
 }
