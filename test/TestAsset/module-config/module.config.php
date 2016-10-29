@@ -469,6 +469,13 @@ return [
                 'description' => 'My list field',
                 'field_type' => 'array',
             ],
+            1 => [
+                'required' => true,
+                'validators' => [],
+                'filters' => [],
+                'name' => 'mysecondlist',
+                'field_type' => 'array',
+            ],
         ],
     ],
     'zf-mvc-auth' => [

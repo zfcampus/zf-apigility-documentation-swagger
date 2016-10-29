@@ -227,7 +227,7 @@ class Service extends BaseService
         }
         $modelFromFields = $this->getModelFromFields();
         $modelFromPostDescription = $this->getModelFromFirstPostDescription();
-        $model = array_replace_recursive($modelFromPostDescription, $modelFromFields);
+        $model = array_replace_recursive($modelFromFields, $modelFromPostDescription);
         return [$this->service->getName() => $model];
     }
 
@@ -288,13 +288,12 @@ class Service extends BaseService
     protected function getFieldProperties(Field $field)
     {
         $type = $this->getFieldType($field);
-        $properties = [
-            'type' => $type,
-            'description' => $field->getDescription()
-        ];
+        $properties =[];
+        $properties['type']=$type;
         if ($type === self::ARRAY_TYPE) {
             $properties['items'] = ['type' => self::DEFAULT_TYPE];
         }
+        $properties['description'] =$field->getDescription();
         return $this->cleanEmptyValues($properties);
     }
 

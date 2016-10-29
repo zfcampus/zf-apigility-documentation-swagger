@@ -89,4 +89,13 @@ return [
         ],
         'description' => 'Ping the API',
     ],
+    'Test\\V1\\Rest\\OnlyPost\\Controller' => [
+        'collection' => [
+            'POST' => [
+                'request' => '{
+   "mysecondlist": [{"foo":"bar"}]
+}',
+            ],
+        ],
+    ],
 ];
