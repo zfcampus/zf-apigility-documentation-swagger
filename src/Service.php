@@ -38,11 +38,11 @@ class Service extends BaseService
      */
     public function toArray()
     {
-        return [
+        return $this->cleanEmptyValues([
             'tags' => $this->getTags(),
             'paths' => $this->cleanEmptyValues($this->getPaths()),
             'definitions' => $this->getDefinitions()
-        ];
+        ]);
     }
 
     protected function getTags()
@@ -308,8 +308,7 @@ class Service extends BaseService
     {
         $entityOperations = $this->service->getEntityOperations();
         if (is_array($entityOperations)) {
-            return array_merge(
-                $this->service->getOperations(), $this->service->getEntityOperations());
+            return array_merge($this->service->getOperations(), $this->service->getEntityOperations());
         }
         return $this->service->getOperations();
     }
