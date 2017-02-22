@@ -6,6 +6,7 @@
 
 namespace ZF\Apigility\Documentation\Swagger;
 
+use ZF\Apigility\Documentation\Field;
 use ZF\Apigility\Documentation\Service as BaseService;
 
 class Service extends BaseService
@@ -156,6 +157,9 @@ class Service extends BaseService
 
         $requiredProperties = $properties = [];
         foreach ($fields as $field) {
+            if (!$field instanceof Field) {
+                continue;
+            }
             $properties[$field->getName()] = [
                 'type' => method_exists($field, 'getFieldType') ? $field->getFieldType() : 'string',
                 'dataType' => method_exists($field, 'getFieldType') ? $field->getFieldType() : 'string',
