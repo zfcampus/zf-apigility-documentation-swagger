@@ -6,7 +6,7 @@
 
 namespace ZFTest\Apigility\Documentation\Swagger;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Zend\EventManager\EventManager;
 use Zend\EventManager\Test\EventListenerIntrospectionTrait;
 use Zend\Http\Response as HttpResponse;
@@ -20,7 +20,7 @@ class SwaggerViewStrategyTest extends TestCase
 {
     use EventListenerIntrospectionTrait;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->events   = new EventManager();
         $this->renderer = new JsonRenderer();

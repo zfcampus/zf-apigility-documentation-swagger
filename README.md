@@ -1,10 +1,9 @@
-Swagger Documentation Provider for Apigility
-============================================
+# Swagger Documentation Provider for Apigility
 
-[![Build Status](https://travis-ci.org/zfcampus/zf-apigility-documentation-swagger.png)](https://travis-ci.org/zfcampus/zf-apigility-documentation-swagger)
+[![Build Status](https://secure.travis-ci.org/zfcampus/zf-apigility-documentation-swagger.svg?branch=master)](https://secure.travis-ci.org/zfcampus/zf-apigility-documentation-swagger)
+[![Coverage Status](https://coveralls.io/repos/github/zfcampus/zf-apigility-documentation-swagger/badge.svg?branch=master)](https://coveralls.io/github/zfcampus/zf-apigility-documentation-swagger?branch=master)
 
-Introduction
-------------
+## Introduction
 
 This module provides Apigility the ability to show API documentation through a
 [Swagger UI](http://swagger.io/).
@@ -17,13 +16,11 @@ payload in the `application/vnd.swagger+json` media type; this resource is what 
 UI. You can access this representation by passing the media type `application/vnd.swagger+json` for
 the `Accept` header via the path `/apigility/documentation/:module/:service`.
 
-Requirements
-------------
+## Requirements
   
 Please see the [composer.json](composer.json) file.
 
-Installation
-------------
+## Installation
 
 Run the following `composer` command:
 
@@ -60,8 +57,7 @@ return [
 > If you use [zf-component-installer](https://github.com/zendframework/zf-component-installer),
 > that plugin will install zf-apigility-documentation-swagger as a module for you.
 
-Routes
-------
+## Routes
 
 ### /apigility/swagger
 
@@ -72,8 +68,7 @@ Shows the Swagger UI JavaScript application.
 Various CSS, images, and JavaScript libraries required to deliver the Swagger UI client
 application.
 
-Configuration
--------------
+## Configuration
 
 ### System Configuration
 
@@ -159,8 +154,7 @@ return [
 ];
 ```
 
-ZF2 Events
-----------
+## ZF Events
 
 ### Listeners
 
@@ -171,8 +165,7 @@ to conditionally attach a view strategy to the view system in cases where the co
 a `ZF\Apigility\Documentation\Swagger\ViewModel` view model (likely selected as the
 content-negotiated view model based off of `Accept` media types).
 
-ZF2 Services
-------------
+## ZF Services
 
 ### View Models
 

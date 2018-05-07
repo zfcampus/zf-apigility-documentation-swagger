@@ -406,7 +406,7 @@ class Service extends BaseService
         if ($type === self::ARRAY_TYPE) {
             $properties['items'] = ['type' => self::DEFAULT_TYPE];
         }
-        $properties['description'] =$field->getDescription();
+        $properties['description'] = $field->getDescription();
         return $this->cleanEmptyValues($properties);
     }
 
