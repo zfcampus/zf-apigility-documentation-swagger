@@ -18,7 +18,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Removed
 
-- Nothing.
+- [#34](https://github.com/zfcampus/zf-apigility-documentation-swagger/pull/34) removes support for HHVM.
 
 ### Fixed
 
@@ -28,6 +28,10 @@ All notable changes to this project will be documented in this file, in reverse 
 ## 1.2.1 - 2016-10-11
 
 ### Added
+
+- [#34](https://github.com/zfcampus/zf-apigility-documentation-swagger/pull/34) adds support for PHP 7.1 and 7.2.
+
+### Changed
 
 - Nothing.
 
