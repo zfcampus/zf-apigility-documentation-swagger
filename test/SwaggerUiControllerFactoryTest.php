@@ -6,7 +6,7 @@
 
 namespace ZFTest\Apigility\Documentation\Swagger;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Zend\ModuleManager\ModuleManager;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\ServiceManager;
@@ -40,7 +40,7 @@ class SwaggerUiControllerFactoryTest extends TestCase
     public function testExceptionThrownOnMissingApiCreatorClass()
     {
         $smFactory = $this->factory;
-        $this->setExpectedException(ServiceNotCreatedException::class);
+        $this->expectException(ServiceNotCreatedException::class);
         $factory = $smFactory($this->services, SwaggerUiController::class);
     }
 
