@@ -2,7 +2,7 @@
 
 /**
  * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014-2016 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2014-2018 Zend Technologies USA Inc. (http://www.zend.com)
  */
 
 namespace ZF\Apigility\Documentation\Swagger;
@@ -14,7 +14,6 @@ use ZF\Apigility\Documentation\Swagger\Model\ModelGenerator;
 
 class Service extends BaseService
 {
-
     const DEFAULT_TYPE = 'string';
     const ARRAY_TYPE = 'array';
 
@@ -22,7 +21,11 @@ class Service extends BaseService
      * @var BaseService
      */
     protected $service;
-    protected $modelGenerator;
+
+    /**
+     * @var ModelGenerator
+     */
+    private $modelGenerator;
 
     /**
      * @param BaseService $service
@@ -45,17 +48,23 @@ class Service extends BaseService
         ]);
     }
 
-    protected function getTags()
+    /**
+     * @return array
+     */
+    private function getTags()
     {
         return [
             $this->cleanEmptyValues([
                 'name' => $this->service->getName(),
-                'description' => $this->service->getDescription()
+                'description' => $this->service->getDescription(),
             ])
         ];
     }
 
-    protected function getPaths()
+    /**
+     * @return array
+     */
+    private function getPaths()
     {
         $route = $this->getRouteWithReplacements();
         if ($this->isRestService()) {
@@ -64,7 +73,10 @@ class Service extends BaseService
         return $this->getOtherPaths($route);
     }
 
-    protected function getRouteWithReplacements()
+    /**
+     * @return string
+     */
+    private function getRouteWithReplacements()
     {
         // routes and parameter mangling ([:foo] will become {foo}
         $search = ['[', ']', '{/', '{:'];
@@ -72,12 +84,19 @@ class Service extends BaseService
         return str_replace($search, $replace, $this->service->route);
     }
 
-    protected function isRestService()
+    /**
+     * @return bool
+     */
+    private function isRestService()
     {
         return ($this->service->routeIdentifierName);
     }
 
-    protected function getRestPaths($route)
+    /**
+     * @param string $route
+     * @return array
+     */
+    private function getRestPaths($route)
     {
         $entityOperations = $this->getEntityOperationsData($route);
         $collectionOperations = $this->getCollectionOperationsData($route);
@@ -93,20 +112,32 @@ class Service extends BaseService
         ];
     }
 
-    protected function getOtherPaths($route)
+    /**
+     * @param string $route
+     * @return array
+     */
+    private function getOtherPaths($route)
     {
         $operations = $this->getOtherOperationsData($route);
         return [$route => $operations];
     }
 
-    protected function getEntityOperationsData($route)
+    /**
+     * @param string $route
+     * @return array
+     */
+    private function getEntityOperationsData($route)
     {
         $urlParameters = $this->getURLParametersRequired($route);
         $operations = $this->service->getEntityOperations();
         return $this->getOperationsData($operations, $urlParameters);
     }
 
-    protected function getCollectionOperationsData($route)
+    /**
+     * @param string $route
+     * @return array
+     */
+    private function getCollectionOperationsData($route)
     {
         $urlParameters = $this->getURLParametersNotRequired($route);
         unset($urlParameters[$this->service->routeIdentifierName]);
@@ -114,14 +145,23 @@ class Service extends BaseService
         return $this->getOperationsData($operations, $urlParameters);
     }
 
-    protected function getOtherOperationsData($route)
+    /**
+     * @param string $route
+     * @return array
+     */
+    private function getOtherOperationsData($route)
     {
         $urlParameters = $this->getURLParametersRequired($route);
         $operations = $this->service->operations;
         return $this->getOperationsData($operations, $urlParameters);
     }
 
-    protected function getOperationsData($operations, $urlParameters)
+    /**
+     * @param string $route
+     * @param array $urlParameters
+     * @return array
+     */
+    private function getOperationsData($operations, $urlParameters)
     {
         $operationsData = [];
         foreach ($operations as $operation) {
@@ -136,17 +176,30 @@ class Service extends BaseService
         return $operationsData;
     }
 
-    protected function getURLParametersRequired($route)
+    /**
+     * @param string $route
+     * @return array
+     */
+    private function getURLParametersRequired($route)
     {
         return $this->getURLParameters($route, true);
     }
 
-    protected function getURLParametersNotRequired($route)
+    /**
+     * @param string $route
+     * @return array
+     */
+    private function getURLParametersNotRequired($route)
     {
         return $this->getURLParameters($route, false);
     }
 
-    protected function getURLParameters($route, $required)
+    /**
+     * @param string $route
+     * @param bool $required
+     * @return array
+     */
+    private function getURLParameters($route, $required)
     {
         // find all parameters in Swagger naming format
         preg_match_all('#{([\w\d_-]+)}#', $route, $parameterMatches);
@@ -166,7 +219,10 @@ class Service extends BaseService
         return $templateParameters;
     }
 
-    protected function getPostPatchPutBodyParameter()
+    /**
+     * @return array
+     */
+    private function getPostPatchPutBodyParameter()
     {
         return [
             'in' => 'body',
@@ -178,28 +234,45 @@ class Service extends BaseService
         ];
     }
 
-    protected function isMethodPostPutOrPatch($method)
+    /**
+     * @param string $method
+     * @return bool
+     */
+    private function isMethodPostPutOrPatch($method)
     {
-        return in_array($method, ['post', 'put', 'patch']);
+        return in_array(strtolower($method), ['post', 'put', 'patch']);
     }
 
-    protected function getMethodFromOperation(Operation $operation)
+    /**
+     * @param Operation $operation
+     * @return string
+     */
+    private function getMethodFromOperation(Operation $operation)
     {
         return strtolower($operation->getHttpMethod());
     }
 
-    protected function getPathOperation(Operation $operation, $parameters)
+    /**
+     * @param Operation $operation
+     * @param array $parameters
+     * @return array
+     */
+    private function getPathOperation(Operation $operation, $parameters)
     {
         return $this->cleanEmptyValues([
-                'tags' => [$this->service->getName()],
-                'description' => $operation->getDescription(),
-                'parameters' => $parameters,
-                'produces' => $this->service->getRequestAcceptTypes(),
-                'responses' => $this->getResponsesFromOperation($operation)
+            'tags' => [$this->service->getName()],
+            'description' => $operation->getDescription(),
+            'parameters' => $parameters,
+            'produces' => $this->service->getRequestAcceptTypes(),
+            'responses' => $this->getResponsesFromOperation($operation),
         ]);
     }
 
-    protected function getResponsesFromOperation(Operation $operation)
+    /**
+     * @param Operation $operation
+     * @return array
+     */
+    private function getResponsesFromOperation(Operation $operation)
     {
         $responses = [];
         $responseStatusCodes = $operation->getResponseStatusCodes();
@@ -207,22 +280,32 @@ class Service extends BaseService
             $code = intval($responseStatusCode['code']);
             $responses[$code] = $this->cleanEmptyValues([
                 'description' => $responseStatusCode['message'],
-                'schema' => $this->getResponseSchema($operation, $code)
+                'schema' => $this->getResponseSchema($operation, $code),
             ]);
         }
         return $responses;
     }
 
-    protected function getResponseSchema(Operation $operation, $code)
+    /**
+     * @param Operation $operation
+     * @param int $code
+     * @return null|array If the return code is neither 200 or 201, returns null.
+     *     Otherwise, it retrieves the response description, passes it to the
+     *     model generator, and uses the returned value.
+     */
+    private function getResponseSchema(Operation $operation, $code)
     {
         if ($code === 200 || $code === 201) {
             return $this->modelGenerator->generate($operation->getResponseDescription());
         }
     }
 
-    protected function getDefinitions()
+    /**
+     * @return array
+     */
+    private function getDefinitions()
     {
-        if (!$this->serviceContainsPostPutOrPatchMethod()) {
+        if (! $this->serviceContainsPostPutOrPatchMethod()) {
             return [];
         }
         $modelFromFields = $this->getModelFromFields();
@@ -231,7 +314,10 @@ class Service extends BaseService
         return [$this->service->getName() => $model];
     }
 
-    protected function serviceContainsPostPutOrPatchMethod()
+    /**
+     * @return bool
+     */
+    private function serviceContainsPostPutOrPatchMethod()
     {
         foreach ($this->getAllOperations() as $operation) {
             $method = $this->getMethodFromOperation($operation);
@@ -239,9 +325,13 @@ class Service extends BaseService
                 return true;
             }
         }
+        return false;
     }
 
-    protected function getModelFromFields()
+    /**
+     * @return array
+     */
+    private function getModelFromFields()
     {
         $required = $properties = [];
         $fields = $this->getFieldsForDefinitions();
@@ -252,20 +342,30 @@ class Service extends BaseService
             }
         }
         return $this->cleanEmptyValues([
-                'type' => 'object',
-                'properties' => $properties,
-                'required' => $required
+            'type' => 'object',
+            'properties' => $properties,
+            'required' => $required,
         ]);
     }
 
-    protected function getModelFromFirstPostDescription()
+    /**
+     * @return array
+     */
+    private function getModelFromFirstPostDescription()
     {
         $firstPostDescription = $this->getFirstPostRequestDescription();
-        $model = $this->modelGenerator->generate($firstPostDescription);
-        return $model ? $model : [];
+        if (! $firstPostDescription) {
+            return [];
+        }
+        return $this->modelGenerator->generate($firstPostDescription) ?: [];
     }
 
-    protected function getFirstPostRequestDescription()
+    /**
+     * @return null|mixed Returns null if no POST operations are discovered;
+     *     otherwise, returns the request description from the first POST
+     *     operation discovered.
+     */
+    private function getFirstPostRequestDescription()
     {
         foreach ($this->getAllOperations() as $operation) {
             $method = $this->getMethodFromOperation($operation);
@@ -273,9 +373,13 @@ class Service extends BaseService
                 return $operation->getRequestDescription();
             }
         }
+        return null;
     }
 
-    protected function getFieldsForDefinitions()
+    /**
+     * @return null|array
+     */
+    private function getFieldsForDefinitions()
     {
         // Fields are part of the default input filter when present.
         $fields = $this->service->fields;
@@ -285,7 +389,11 @@ class Service extends BaseService
         return $fields;
     }
 
-    protected function getFieldProperties(Field $field)
+    /**
+     * @param Field $field
+     * @return array
+     */
+    private function getFieldProperties(Field $field)
     {
         $type = $this->getFieldType($field);
         $properties =[];
@@ -297,14 +405,21 @@ class Service extends BaseService
         return $this->cleanEmptyValues($properties);
     }
 
-    protected function getFieldType(Field $field)
+    /**
+     * @param Field $field
+     * @return string
+     */
+    private function getFieldType(Field $field)
     {
-        return (method_exists($field, 'getFieldType') &&
-            !empty($field->getFieldType())) ?
-            $field->getFieldType() : self::DEFAULT_TYPE;
+        return method_exists($field, 'getFieldType') && ! empty($field->getFieldType())
+            ? $field->getFieldType()
+            : self::DEFAULT_TYPE;
     }
 
-    protected function getAllOperations()
+    /**
+     * @return array
+     */
+    private function getAllOperations()
     {
         $entityOperations = $this->service->getEntityOperations();
         if (is_array($entityOperations)) {
@@ -313,10 +428,14 @@ class Service extends BaseService
         return $this->service->getOperations();
     }
 
-    protected function cleanEmptyValues(array $data)
+    /**
+     * @param array $data
+     * @return array $data omitting empty values
+     */
+    private function cleanEmptyValues(array $data)
     {
         return array_filter($data, function ($item) {
-            return !empty($item);
+            return ! empty($item);
         });
     }
 }

@@ -1,4 +1,8 @@
 <?php
+/**
+ * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
+ * @copyright Copyright (c) 2014-2018 Zend Technologies USA Inc. (http://www.zend.com)
+ */
 
 namespace ZFTest\Apigility\Documentation\Swagger\Model;
 
@@ -7,15 +11,29 @@ use ZF\Apigility\Documentation\Swagger\Model\ModelGenerator;
 
 class ModelGeneratorTest extends TestCase
 {
-
+    /**
+     * @var string
+     */
     protected $fixturesPath = __DIR__ . '/TestAsset/fixtures/models/';
+
+    /**
+     * @var ModelGenerator
+     */
     protected $modelGenerator;
 
     public function setUp()
     {
-        parent::setUp();
-
         $this->modelGenerator = new ModelGenerator();
+    }
+
+    private function getFixtureData($inputFileName, $resultFileName)
+    {
+        $inputPath = $this->fixturesPath . $inputFileName;
+        $resultPath = $this->fixturesPath . $resultFileName;
+        return [
+            file_get_contents($inputPath),
+            json_decode(file_get_contents($resultPath), true)
+        ];
     }
 
     public function testShouldBeCreated()
@@ -58,15 +76,5 @@ class ModelGeneratorTest extends TestCase
     {
         $swaggerModel = $this->modelGenerator->generate($input);
         $this->assertEquals($expectedModel, $swaggerModel);
-    }
-
-    private function getFixtureData($inputFileName, $resultFileName)
-    {
-        $inputPath = $this->fixturesPath . $inputFileName;
-        $resultPath = $this->fixturesPath . $resultFileName;
-        return [
-            file_get_contents($inputPath),
-            json_decode(file_get_contents($resultPath), true)
-        ];
     }
 }

@@ -1,4 +1,8 @@
 <?php
+/**
+ * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
+ * @copyright Copyright (c) 2014-2018 Zend Technologies USA Inc. (http://www.zend.com)
+ */
 
 namespace ZFTest\Apigility\Documentation\Swagger;
 
@@ -6,9 +10,19 @@ use ZF\Apigility\Documentation\Swagger\Api;
 
 class ApiTest extends BaseApiFactoryTest
 {
-
+    /**
+     * @var Api
+     */
     protected $api;
+
+    /**
+     * @var string
+     */
     protected $fixture;
+
+    /**
+     * @var array
+     */
     protected $result;
 
     public function setUp()
@@ -17,6 +31,29 @@ class ApiTest extends BaseApiFactoryTest
         $this->api = new Api($this->apiFactory->createApi('Test', 1));
         $this->fixture = $this->getFixture('swagger2.json');
         $this->result = $this->api->toArray();
+    }
+
+    public function assertEqualsArrays($expected, $actual, $message = '')
+    {
+        sort($expected);
+        sort($actual);
+        $this->assertEquals($expected, $actual, $message);
+    }
+
+    public function assertAllFields($field, callable $assert)
+    {
+        $expectedPaths = $this->fixture['paths'];
+        $paths = $this->result['paths'];
+        foreach ($expectedPaths as $expectedPathKey => $expectedPathValue) {
+            foreach ($expectedPathValue as $expectedOperationKey => $expectedOperationValue) {
+                if (array_key_exists($field, $expectedOperationValue)) {
+                    $expected = $expectedOperationValue[$field];
+                    $actual = $paths[$expectedPathKey][$expectedOperationKey][$field];
+                    $message = $expectedPathKey . '-' . $expectedOperationKey;
+                    $assert($expected, $actual, $message);
+                }
+            }
+        }
     }
 
     public function testApiShouldBeCreated()
@@ -94,28 +131,5 @@ class ApiTest extends BaseApiFactoryTest
     {
         $result = $this->api->toArray();
         $this->assertFixture('swagger2.json', $result);
-    }
-
-    protected function assertEqualsArrays($expected, $actual, $message = '')
-    {
-        sort($expected);
-        sort($actual);
-        $this->assertEquals($expected, $actual, $message);
-    }
-
-    public function assertAllFields($field, callable $assert)
-    {
-        $expectedPaths = $this->fixture['paths'];
-        $paths = $this->result['paths'];
-        foreach ($expectedPaths as $expectedPathKey => $expectedPathValue) {
-            foreach ($expectedPathValue as $expectedOperationKey => $expectedOperationValue) {
-                if (array_key_exists($field, $expectedOperationValue)) {
-                    $expected = $expectedOperationValue[$field];
-                    $actual = $paths[$expectedPathKey][$expectedOperationKey][$field];
-                    $message = $expectedPathKey . '-' . $expectedOperationKey;
-                    $assert($expected, $actual, $message);
-                }
-            }
-        }
     }
 }
