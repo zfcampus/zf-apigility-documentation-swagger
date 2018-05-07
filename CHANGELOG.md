@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Changed
 
-- Nothing.
+- [#28](https://github.com/zfcampus/zf-apigility-documentation-swagger/pull/28) updates the component to generate Swagger 2.2.6 / OpenAPI 2.0 documentation (instead of Swagger 1.3).
 
 ### Deprecated
 
