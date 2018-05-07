@@ -1,0 +1,31 @@
+{
+    "_links": {
+        "self": {
+            "href": "/users"
+        },
+        "first": {
+            "href": "/users?page={page}"
+        },
+        "prev": {
+            "href": "/users?page={page}"
+        },
+        "next": {
+            "href": "/users?page={page}"
+        },
+        "last": {
+            "href": "/users?page={page}"
+        }
+    },
+    "_embedded": {
+        "users": [
+            {
+                "_links": {
+                    "self": {
+                        "href": "/users[/:users_id]"
+                    }
+                }
+
+            }
+        ]
+    }
+}

@@ -2,11 +2,15 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
-## 1.2.2 - TBD
+## 1.3.0 - 2018-05-07
 
 ### Added
 
-- Nothing.
+- [#34](https://github.com/zfcampus/zf-apigility-documentation-swagger/pull/34) adds support for PHP 7.1 and 7.2.
+
+### Changed
+
+- [#28](https://github.com/zfcampus/zf-apigility-documentation-swagger/pull/28) updates the component to generate Swagger 2.2.6 / OpenAPI 2.0 documentation (instead of Swagger 1.3).
 
 ### Deprecated
 
@@ -14,15 +18,20 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Removed
 
-- Nothing.
+- [#34](https://github.com/zfcampus/zf-apigility-documentation-swagger/pull/34) removes support for HHVM.
 
 ### Fixed
 
-- Nothing.
+- [#29](https://github.com/zfcampus/zf-apigility-documentation-swagger/pull/29) fixes an issue that occurs when a field definition in an input filter
+  is not a `Field` instance; these are now skipped when generating field documentation.
 
 ## 1.2.1 - 2016-10-11
 
 ### Added
+
+- Nothing.
+
+### Changed
 
 - Nothing.
 

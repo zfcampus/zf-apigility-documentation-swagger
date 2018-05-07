@@ -13,7 +13,7 @@ class Api extends BaseApi
     /**
      * @var BaseApi
      */
-    protected $api;
+    private $api;
 
     /**
      * @param BaseApi $api
@@ -28,24 +28,19 @@ class Api extends BaseApi
      */
     public function toArray()
     {
-        $services = [];
+        $output = [
+            'swagger' => '2.0',
+            'info' => [
+                'title' => $this->api->getName(),
+                'version' => (string) $this->api->getVersion()
+            ]
+        ];
+
         foreach ($this->api->services as $service) {
-            $services[] = [
-                'description' => ($description = $service->getDescription())
-                ? $description
-                : '',
-                'path' => '/' . $service->getName()
-            ];
+            $outputService = new Service($service);
+            $output = array_merge_recursive($output, $outputService->toArray());
         }
 
-        return [
-            'apiVersion' => $this->api->version,
-            'swaggerVersion' => '1.2',
-            /*
-            'basePath' => '/api',
-            'resourcePath' => '/' . $this->api->name,
-            */
-            'apis' => $services,
-        ];
+        return $output;
     }
 }

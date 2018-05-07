@@ -1,7 +1,7 @@
 <?php
 /**
  * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014-2016 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2014-2018 Zend Technologies USA Inc. (http://www.zend.com)
  */
 
 namespace ZF\Apigility\Documentation\Swagger;
@@ -15,9 +15,7 @@ class ViewModel extends JsonModel
      */
     public function getVariables()
     {
-        if (! array_key_exists('type', $this->variables)
-            || empty($this->variables['type'])
-        ) {
+        if (! array_key_exists('type', $this->variables) || empty($this->variables['type'])) {
             return $this->variables;
         }
 
@@ -26,9 +24,6 @@ class ViewModel extends JsonModel
                 return $this->variables['documentation'];
             case 'api':
                 $model = new Api($this->variables['documentation']);
-                return $model->toArray();
-            case 'service':
-                $model = new Service($this->variables['documentation'], $this->variables['baseUrl']);
                 return $model->toArray();
         }
     }

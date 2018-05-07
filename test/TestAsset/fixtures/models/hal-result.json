@@ -1,0 +1,107 @@
+{
+    "type": "object",
+    "properties": {
+        "_links": {
+            "type": "object",
+            "properties": {
+                "self": {
+                    "type": "object",
+                    "properties": {
+                        "href": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "first": {
+                    "type": "object",
+                    "properties": {
+                        "href": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "prev": {
+                    "type": "object",
+                    "properties": {
+                        "href": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "next": {
+                    "type": "object",
+                    "properties": {
+                        "href": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "last": {
+                    "type": "object",
+                    "properties": {
+                        "href": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "_embedded": {
+            "type": "object",
+            "properties": {
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "_links": {
+                                "type": "object",
+                                "properties": {
+                                    "self": {
+                                        "type": "object",
+                                        "properties": {
+                                            "href": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "example": {
+        "_links": {
+            "self": {
+                "href": "/users"
+            },
+            "first": {
+                "href": "/users?page={page}"
+            },
+            "prev": {
+                "href": "/users?page={page}"
+            },
+            "next": {
+                "href": "/users?page={page}"
+            },
+            "last": {
+                "href": "/users?page={page}"
+            }
+        },
+        "_embedded": {
+            "users": [
+                {
+                    "_links": {
+                        "self": {
+                            "href": "/users[/:users_id]"
+                        }
+                    }
+
+                }
+            ]
+        }
+    }
+}

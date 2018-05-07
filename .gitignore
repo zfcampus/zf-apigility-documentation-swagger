@@ -1,3 +1,6 @@
-vendor/
-.idea/
-phpunit.xml
+/.idea/
+/clover.xml
+/coveralls-upload.json
+/nbproject/
+/phpunit.xml
+/vendor/

@@ -1,0 +1,7 @@
+{
+    "integerField": 1,
+    "stringField": "foo",
+    "floatField" : 90.5,
+    "booleanField": true,
+    "integerArrayField": [1, 2, 3]
+}
