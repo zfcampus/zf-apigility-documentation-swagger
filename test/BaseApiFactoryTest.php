@@ -6,7 +6,7 @@
 
 namespace ZFTest\Apigility\Documentation\Swagger;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use Zend\ModuleManager\ModuleManager;
 use ZF\Apigility\Documentation\ApiFactory;
 use ZF\Apigility\Provider\ApigilityProviderInterface;

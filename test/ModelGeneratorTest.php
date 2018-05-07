@@ -6,7 +6,7 @@
 
 namespace ZFTest\Apigility\Documentation\Swagger\Model;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use ZF\Apigility\Documentation\Swagger\Model\ModelGenerator;
 
 class ModelGeneratorTest extends TestCase
