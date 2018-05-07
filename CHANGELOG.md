@@ -22,7 +22,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Fixed
 
-- Nothing.
+- [#29](https://github.com/zfcampus/zf-apigility-documentation-swagger/pull/29) fixes an issue that occurs when a field definition in an input filter
+  is not a `Field` instance; these are now skipped when generating field documentation.
 
 ## 1.2.1 - 2016-10-11
 
