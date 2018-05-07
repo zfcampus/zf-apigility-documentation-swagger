@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
-- Nothing.
+- [#34](https://github.com/zfcampus/zf-apigility-documentation-swagger/pull/34) adds support for PHP 7.1 and 7.2.
 
 ### Changed
 
@@ -29,7 +29,7 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ### Added
 
-- [#34](https://github.com/zfcampus/zf-apigility-documentation-swagger/pull/34) adds support for PHP 7.1 and 7.2.
+- Nothing.
 
 ### Changed
 
