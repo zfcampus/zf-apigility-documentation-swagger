@@ -1,0 +1,914 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Test",
+        "version": "1.0"
+    },
+    "tags": [{
+            "name": "BooBaz"
+        }, {
+            "name": "EntityFields"
+        }, {
+            "name": "FooBarCollection",
+            "description": "Some general notes about the FooBarCollection rest service"
+        }, {
+            "name": "FooBar",
+            "description": "Some general notes about the FooBar rest service"
+        }, {
+            "name": "OnlyPost"
+        }, {
+            "name": "MyRpc"
+        }, {
+            "name": "Ping",
+            "description": "Ping the API"
+        }],
+    "paths": {
+        "/boo-baz": {
+            "get": {
+                "tags": ["BooBaz"],
+                "produces": [
+                    "application/vnd.test.v1+json",
+                    "application/hal+json",
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "406": {
+                        "description": "Not Acceptable"
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type"
+                    }
+                }
+            },
+            "post": {
+                "tags": ["BooBaz"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/BooBaz"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/vnd.test.v1+json",
+                    "application/hal+json",
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "406": {
+                        "description": "Not Acceptable"
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type"
+                    }
+                }
+            }
+        },
+        "/boo-baz/{boo_baz_id}": {
+            "delete": {
+                "tags": ["BooBaz"],
+                "parameters": [
+                    {
+                        "description": "URL parameter boo_baz_id",
+                        "in": "path",
+                        "maximum": 1,
+                        "minimum": 0,
+                        "name": "boo_baz_id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/vnd.test.v1+json",
+                    "application/hal+json",
+                    "application/json"
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "406": {
+                        "description": "Not Acceptable"
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type"
+                    }
+                }
+            },
+            "get": {
+                "tags": ["BooBaz"],
+                "parameters": [
+                    {
+                        "description": "URL parameter boo_baz_id",
+                        "in": "path",
+                        "maximum": 1,
+                        "minimum": 0,
+                        "name": "boo_baz_id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/vnd.test.v1+json",
+                    "application/hal+json",
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "406": {
+                        "description": "Not Acceptable"
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type"
+                    }
+                }
+            },
+            "patch": {
+                "tags": ["BooBaz"],
+                "parameters": [
+                    {
+                        "description": "URL parameter boo_baz_id",
+                        "in": "path",
+                        "maximum": 1,
+                        "minimum": 0,
+                        "name": "boo_baz_id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/BooBaz"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/vnd.test.v1+json",
+                    "application/hal+json",
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "406": {
+                        "description": "Not Acceptable"
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type"
+                    }
+                }
+            },
+            "put": {
+                "tags": ["BooBaz"],
+                "parameters": [
+                    {
+                        "description": "URL parameter boo_baz_id",
+                        "in": "path",
+                        "maximum": 1,
+                        "minimum": 0,
+                        "name": "boo_baz_id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/BooBaz"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/vnd.test.v1+json",
+                    "application/hal+json",
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "406": {
+                        "description": "Not Acceptable"
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type"
+                    }
+                }
+            }
+        },
+        "/entity-fields": {
+            "put": {
+                "tags": ["EntityFields"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/EntityFields"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/vnd.test.v1+json",
+                    "application/json",
+                    "application/*+json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Client Error"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "406": {
+                        "description": "Not Acceptable"
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    }
+                }
+            }
+        },
+        "/foo-bar": {
+            "get": {
+                "tags": ["FooBar"],
+                "description": "Collection FooBar GET!",
+                "produces": [
+                    "application/vnd.test.v1+json",
+                    "application/hal+json",
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "406": {
+                        "description": "Not Acceptable"
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type"
+                    }
+                }
+            },
+            "post": {
+                "tags": ["FooBar"],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/FooBar"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/vnd.test.v1+json",
+                    "application/hal+json",
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "400": {
+                        "description": "Client Error"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "406": {
+                        "description": "Not Acceptable"
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    }
+                }
+            }
+        },
+        "/foo-bar/{foo_bar_id}": {
+            "delete": {
+                "tags": ["FooBar"],
+                "parameters": [
+                    {
+                        "description": "URL parameter foo_bar_id",
+                        "in": "path",
+                        "maximum": 1,
+                        "minimum": 0,
+                        "name": "foo_bar_id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/vnd.test.v1+json",
+                    "application/hal+json",
+                    "application/json"
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "406": {
+                        "description": "Not Acceptable"
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type"
+                    }
+                }
+            },
+            "get": {
+                "tags": ["FooBar"],
+                "parameters": [
+                    {
+                        "description": "URL parameter foo_bar_id",
+                        "in": "path",
+                        "maximum": 1,
+                        "minimum": 0,
+                        "name": "foo_bar_id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                    "application/vnd.test.v1+json",
+                    "application/hal+json",
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "406": {
+                        "description": "Not Acceptable"
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type"
+                    }
+                }
+            },
+            "patch": {
+                "tags": ["FooBar"],
+                "parameters": [
+                    {
+                        "description": "URL parameter foo_bar_id",
+                        "in": "path",
+                        "maximum": 1,
+                        "minimum": 0,
+                        "name": "foo_bar_id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/FooBar"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/vnd.test.v1+json",
+                    "application/hal+json",
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Client Error"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "406": {
+                        "description": "Not Acceptable"
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    }
+                }
+            },
+            "put": {
+                "tags": ["FooBar"],
+                "parameters": [
+                    {
+                        "description": "URL parameter foo_bar_id",
+                        "in": "path",
+                        "maximum": 1,
+                        "minimum": 0,
+                        "name": "foo_bar_id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/FooBar"
+                        }
+                    }
+                ],
+                "produces": [
+                    "application/vnd.test.v1+json",
+                    "application/hal+json",
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Client Error"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "406": {
+                        "description": "Not Acceptable"
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    }
+                }
+            }
+        },
+        "/foo-bar-collection": {
+            "get": {
+                "tags": ["FooBarCollection"],
+                "produces": ["application/vnd.test.v1+json", "application/hal+json", "application/json"],
+                "responses": {
+                    "406": {
+                        "description": "Not Acceptable"
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type"
+                    },
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "tags": ["FooBarCollection"],
+                "parameters": [{
+                        "in": "body",
+                        "name": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/FooBarCollection"
+                        }
+                    }],
+                "produces": ["application/vnd.test.v1+json", "application/hal+json", "application/json"],
+                "responses": {
+                    "406": {
+                        "description": "Not Acceptable"
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type"
+                    },
+                    "201": {
+                        "description": "Created"
+                    },
+                    "400": {
+                        "description": "Client Error"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/foo-bar-collection/{foo_bar_collection_id}": {
+            "get": {
+                "tags": ["FooBarCollection"],
+                "parameters": [{
+                        "in": "path",
+                        "name": "foo_bar_collection_id",
+                        "description": "URL parameter foo_bar_collection_id",
+                        "type": "string",
+                        "required": true,
+                        "minimum": 0,
+                        "maximum": 1
+                    }],
+                "produces": ["application/vnd.test.v1+json", "application/hal+json", "application/json"],
+                "responses": {
+                    "406": {
+                        "description": "Not Acceptable"
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type"
+                    },
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    }
+                }
+            },
+            "patch": {
+                "tags": ["FooBarCollection"],
+                "parameters": [{
+                        "in": "path",
+                        "name": "foo_bar_collection_id",
+                        "description": "URL parameter foo_bar_collection_id",
+                        "type": "string",
+                        "required": true,
+                        "minimum": 0,
+                        "maximum": 1
+                    }, {
+                        "in": "body",
+                        "name": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/FooBarCollection"
+                        }
+                    }],
+                "produces": ["application/vnd.test.v1+json", "application/hal+json", "application/json"],
+                "responses": {
+                    "406": {
+                        "description": "Not Acceptable"
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type"
+                    },
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "400": {
+                        "description": "Client Error"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            },
+            "put": {
+                "tags": ["FooBarCollection"],
+                "parameters": [{
+                        "in": "path",
+                        "name": "foo_bar_collection_id",
+                        "description": "URL parameter foo_bar_collection_id",
+                        "type": "string",
+                        "required": true,
+                        "minimum": 0,
+                        "maximum": 1
+                    }, {
+                        "in": "body",
+                        "name": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/FooBarCollection"
+                        }
+                    }],
+                "produces": ["application/vnd.test.v1+json", "application/hal+json", "application/json"],
+                "responses": {
+                    "406": {
+                        "description": "Not Acceptable"
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type"
+                    },
+                    "200": {
+                        "description": "OK"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "400": {
+                        "description": "Client Error"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            },
+            "delete": {
+                "tags": ["FooBarCollection"],
+                "parameters": [{
+                        "in": "path",
+                        "name": "foo_bar_collection_id",
+                        "description": "URL parameter foo_bar_collection_id",
+                        "type": "string",
+                        "required": true,
+                        "minimum": 0,
+                        "maximum": 1
+                    }],
+                "produces": ["application/vnd.test.v1+json", "application/hal+json", "application/json"],
+                "responses": {
+                    "406": {
+                        "description": "Not Acceptable"
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type"
+                    },
+                    "204": {
+                        "description": "No Content"
+                    },
+                    "404": {
+                        "description": "Not Found"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    }
+                }
+            }
+        },
+        "/my-rpc": {
+            "get": {
+                "tags": ["MyRpc"],
+                "produces": [
+                    "application/vnd.test.v1+json",
+                    "application/json",
+                    "application/*+json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "406": {
+                        "description": "Not Acceptable"
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type"
+                    }
+                }
+            }
+        },
+        "/ping": {
+            "get": {
+                "tags": ["Ping"],
+                "description": "Ping the API to see uptime and network lag",
+                "produces": [
+                    "application/vnd.test.v1+json",
+                    "application/json",
+                    "application/*+json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "ack": {
+                                    "type": "integer"
+                                }
+                            },
+                            "example": {
+                                "ack": 123456789
+                            }
+                        }
+                    },
+                    "406": {
+                        "description": "Not Acceptable"
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type"
+                    }
+                }
+            }
+        },
+        "/only-post": {
+            "post": {
+                "tags": ["OnlyPost"],
+                "parameters": [{
+                        "in": "body",
+                        "name": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/OnlyPost"
+                        }
+                    }],
+                "produces": ["application/vnd.foo.v1+json", "application/hal+json", "application/json"],
+                "responses": {
+                    "400": {
+                        "description": "Client Error"
+                    },
+                    "406": {
+                        "description": "Not Acceptable"
+                    },
+                    "415": {
+                        "description": "Unsupported Media Type"
+                    },
+                    "422": {
+                        "description": "Unprocessable Entity"
+                    },
+                    "201": {
+                        "description": "Created"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "BooBaz": {
+            "type": "object"
+        },
+        "EntityFields": {
+            "type": "object",
+            "properties": {
+                "test": {
+                    "description": "test",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "test"
+            ]
+        },
+        "FooBar": {
+            "type": "object",
+            "properties": {
+                "bergoo": {
+                    "type": "string"
+                },
+                "foofoogoober/subgoober/subgoober": {
+                    "type": "string"
+                },
+                "foogoober/subgoober": {
+                    "type": "string"
+                },
+                "goober": {
+                    "description": "This is the description for goober.",
+                    "type": "string"
+                },
+                "name/name": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "goober",
+                "bergoo",
+                "foogoober/subgoober",
+                "foofoogoober/subgoober/subgoober",
+                "name/name"
+            ],
+            "example": {
+                "goober": "Example goober value",
+                "bergoo": "Example bergoo value"
+            }
+        },
+        "FooBarCollection": {
+            "type": "object",
+            "properties": {
+                "AnotherCollection[]/FooBar": {
+                    "type": "string"
+                },
+                "FooBarCollection[]/FooBar": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "FooBarCollection[]/FooBar",
+                "AnotherCollection[]/FooBar"
+            ]
+        },
+        "OnlyPost": {
+            "type": "object",
+            "properties": {
+                "mylist": {
+                    "type": "array",
+                    "description": "My list field",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "mysecondlist":{
+                    "type":"array",
+                    "items":{
+                        "type":"object",
+                        "properties":{
+                            "foo":{
+                                "type":"string"
+                            }
+                        }
+                    }
+                }
+            },
+            "required": ["mylist", "mysecondlist"],
+            "example":{"mysecondlist":[{"foo":"bar"}]}
+        }
+    }
+}

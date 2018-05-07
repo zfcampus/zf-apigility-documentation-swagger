@@ -1,0 +1,35 @@
+{
+    "type": "object",
+    "properties": {
+        "name": {
+            "type": "string"
+        },
+        "address": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "type": {
+                        "type": "string"
+                    },
+                    "line1": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    },
+    "example": {
+        "name": "Jhon",
+        "address": [
+            {
+                "type": "home",
+                "line1": "1st street"
+            },
+            {
+                "type": "office",
+                "line1": "2nd street"
+            }
+        ]
+    }
+}

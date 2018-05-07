@@ -1,0 +1,13 @@
+{
+    "name": "Jhon",
+    "address": [
+        {
+            "type": "home",
+            "line1": "1st street"
+        },
+        {
+            "type": "office",
+            "line1": "2nd street"
+        }
+    ]
+}

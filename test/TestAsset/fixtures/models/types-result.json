@@ -1,0 +1,30 @@
+{
+    "type": "object",
+    "properties": {
+        "integerField": {
+            "type": "integer"
+        },
+        "stringField": {
+            "type": "string"
+        },
+        "floatField": {
+            "type": "number"
+        },
+        "booleanField": {
+            "type": "boolean"
+        },
+        "integerArrayField": {
+            "type": "array",
+            "items": {
+                "type": "integer"
+            }
+        }
+    },
+    "example": {
+        "integerField": 1,
+        "stringField": "foo",
+        "floatField": 90.5,
+        "booleanField": true,
+        "integerArrayField": [1, 2, 3]
+    }
+}

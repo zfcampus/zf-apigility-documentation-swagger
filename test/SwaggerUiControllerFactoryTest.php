@@ -1,7 +1,7 @@
 <?php
 /**
  * @license   http://opensource.org/licenses/BSD-3-Clause BSD-3-Clause
- * @copyright Copyright (c) 2014-2016 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright Copyright (c) 2014-2018 Zend Technologies USA Inc. (http://www.zend.com)
  */
 
 namespace ZFTest\Apigility\Documentation\Swagger;
@@ -10,7 +10,6 @@ use PHPUnit_Framework_TestCase as TestCase;
 use Zend\ModuleManager\ModuleManager;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\ServiceManager;
-use Zend\Test\PHPUnit\Controller\AbstractHttpControllerTestCase;
 use ZF\Apigility\Documentation\ApiFactory;
 use ZF\Apigility\Documentation\Swagger\SwaggerUiController;
 use ZF\Apigility\Documentation\Swagger\SwaggerUiControllerFactory;
@@ -35,6 +34,9 @@ class SwaggerUiControllerFactoryTest extends TestCase
         $this->services = $services = new ServiceManager();
     }
 
+    /**
+     * @expectedException \Zend\ServiceManager\Exception\ServiceNotCreatedException
+     */
     public function testExceptionThrownOnMissingApiCreatorClass()
     {
         $smFactory = $this->factory;
