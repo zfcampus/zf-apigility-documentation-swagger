@@ -7,9 +7,9 @@
 
 namespace ZF\Apigility\Documentation\Swagger;
 
-use ZF\Apigility\Documentation\Service as BaseService;
-use ZF\Apigility\Documentation\Operation;
 use ZF\Apigility\Documentation\Field;
+use ZF\Apigility\Documentation\Operation;
+use ZF\Apigility\Documentation\Service as BaseService;
 use ZF\Apigility\Documentation\Swagger\Model\ModelGenerator;
 
 class Service extends BaseService
@@ -334,13 +334,18 @@ class Service extends BaseService
     private function getModelFromFields()
     {
         $required = $properties = [];
-        $fields = $this->getFieldsForDefinitions();
-        foreach ($fields as $field) {
+
+        foreach ($this->getFieldsForDefinitions() as $field) {
+            if (! $field instanceof Field) {
+                continue;
+            }
+
             $properties[$field->getName()] = $this->getFieldProperties($field);
             if ($field->isRequired()) {
                 $required[] = $field->getName();
             }
         }
+
         return $this->cleanEmptyValues([
             'type' => 'object',
             'properties' => $properties,
@@ -396,8 +401,8 @@ class Service extends BaseService
     private function getFieldProperties(Field $field)
     {
         $type = $this->getFieldType($field);
-        $properties =[];
-        $properties['type']=$type;
+        $properties = [];
+        $properties['type'] = $type;
         if ($type === self::ARRAY_TYPE) {
             $properties['items'] = ['type' => self::DEFAULT_TYPE];
         }
