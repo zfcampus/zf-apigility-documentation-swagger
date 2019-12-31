@@ -1,5 +1,9 @@
 # Swagger Documentation Provider for Apigility
 
+> ## Repository abandoned 2019-12-31
+>
+> This repository has moved to laminas-api-tools/api-tools-documentation-swagger.
+
 [![Build Status](https://secure.travis-ci.org/zfcampus/zf-apigility-documentation-swagger.svg?branch=master)](https://secure.travis-ci.org/zfcampus/zf-apigility-documentation-swagger)
 [![Coverage Status](https://coveralls.io/repos/github/zfcampus/zf-apigility-documentation-swagger/badge.svg?branch=master)](https://coveralls.io/github/zfcampus/zf-apigility-documentation-swagger?branch=master)
 
